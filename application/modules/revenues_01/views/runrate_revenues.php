@@ -54,29 +54,21 @@
               <h2>Runrate</h2>
               
            
-                <a href="./revenues/dlTablexls">Download</a>
+                <a href="./revenues_01/download">Download</a>
 
                   <table id="revenueTbl">
                   <thead id="first-head">
-                    <tr><th >REVENUE SUMMARY (in PHP 000s)</th></tr>
+                    <?php echo $header;?>
                     
                   </thead>
-                  <tbody id="first-body"></tbody>
-                  <thead id="second-head">
- 
+                  <tbody id="first-body">
+                    <?php echo $body;?>
+                  </tbody>
+                    <thead>
+                    <?php echo $footer;?>
                     
                   </thead>
-                    <tbody id="second-body"></tbody>
-                    <thead id="third-head">
- 
-                    
-                  </thead>
-                    <tbody id="third-body"></tbody>
-                      <thead id="fourth-head">
- 
-                    
-                  </thead>
-                  </table>
+                   </table>
 
 
       </div>
@@ -130,36 +122,8 @@ function Right(str, n){
      return monthNames[parseInt(m-1)];
    }       
 
-   html = get_post_JSON_Obj("./revenues/revTable","GET","");
 
-   var d = new Date(); 
-d.date_sub(-1);
-var monthInt =parseInt(Right(Left(d.yyyymmdd(),7),2));
-
-          
-          var thead = "";
-          for (i = 1; i <= monthInt; i++) { 
-              thead += "<th>" +get_month_name(i) +" Rev</th>";
-              thead += "<th>" +get_month_name(i) +" Bud</th>";
-              thead += "<th>" +get_month_name(i) +" Var</th>";
-              thead += "<th>" +get_month_name(i) +" %</th>";
-          }
-
-  $("#revenueTbl > thead#first-head > tr:first-child").append(thead);
-   $("#revenueTbl > tbody#first-body").html(html.itbody);
-  
-   $("#revenueTbl > thead#first-head").append(html.ithead);
-
-   $("#revenueTbl > tbody#second-body").html(html.mtbody);
-  
-   $("#revenueTbl > thead#second-head").append(html.mthead);
-
-   $("#revenueTbl > tbody#third-body").html(html.otbody);
-  
-   $("#revenueTbl > thead#third-head").append(html.othead);
-   $("#revenueTbl > thead#fourth-head").append(html.tthead);
-
-    $("#revenueTbl").treetable({ expandable: true });
+    $("#revenueTbl").treetable({ expandable: false });
 			
 
 

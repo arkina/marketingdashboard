@@ -1,9 +1,9 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Revenues_01 extends MY_Controller {
 
 	public $totalRow = array();
+	public $lastRow;	
 	  function __construct()
     {
         // Call the Model constructor
@@ -12,41 +12,48 @@ class Revenues_01 extends MY_Controller {
 		$this->objPHPExcel = new PHPExcel();
 		$this->objPHPExcel->setActiveSheetIndex(0);
 		$this->sheet = $this->objPHPExcel->getActiveSheet();
+		$this->sheet->getColumnDimension('A')->setAutoSize(true);
 		$this->load->model("Revenues_mdl");
 		date_default_timezone_set("Asia/Taipei");	
 		$this->ydate=date_create(date("Y-m-d"));
         date_sub($this->ydate,date_interval_create_from_date_string("1 day"));
         $this->monthNum  = intval(date_format($this->ydate,"m"));
 
+
     }
-    public function jsondata(){
+
+    
+    public function index(){
     	$this->set_header();
 	    $this->set_body();	
+	    $this->set_footer();	
+	    $data['header'] = $this->get_header();
+	    $data['body']   = $this->get_body();
+	    $data['footer'] = $this->get_footer();
+	    
+	   
 
-	    $header = $this->get_header();
-	    $body   = $this->get_body();
-	    $table = array_merge($header,$body);
-
-	    echo "<pre>";
-	    echo json_encode($table,JSON_PRETTY_PRINT);	
+	     $this->load->view("runrate_revenues",$data);	
 	
     }
+
 
     public function download(){
 
 
 
 	header("Content-Type: application/vnd.ms-excel");
-	header("Content-Disposition: attachment; filename=".date_format($this->ydate,"Ym")."_runrate_revenues.xls");
+	header("Content-Disposition: attachment; filename=".date_format($this->ydate,"Ym")."_runrate_revenues.xlsx");
 	header("Pragma: no-cache");
 	header("Expires: 0");
 
 	flush();
 
 	$this->set_header();
-	$this->set_body();				
+	$this->set_body();
+	$this->set_footer();				
 
-	$objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
+	$objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel2007');
 
     $objWriter->save('php://output');
 	
@@ -60,21 +67,25 @@ class Revenues_01 extends MY_Controller {
 
 		$mdl = $this->Revenues_mdl;
 		$result = $mdl->get_runrate_nodes_all();
-
+		$lvl=0; 			
 		foreach ($result as $k => $v) {
 			$id   = $v->id;
 			$sid  = $v->sid;
 			$pid  = $v->pid;
 			$lvl  = $v->level;
 			$ctyp = $v->ctype; 
+			$depth = $v->depth;
 			$srvc = $mdl->get_runrate_services_byid($sid);
 			$name = $srvc->name;
 			$col  = 0;
 			$sA   = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
 			$this->sheet->setCellValue($sA,$name);
-			$this->set($ctyp,$col,$id,$lvl);
+			$this->sheet->getStyle($sA)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT)->setIndent(intval($depth));
+				$this->set($ctyp,$col,$id,$lvl);
 				
 		}
+
+		$this->lastRow = $lvl;
 
   }
 
@@ -82,21 +93,24 @@ class Revenues_01 extends MY_Controller {
 
 	public function get_body(){
 
-		$rows = array();
 	
 		$mdl = $this->Revenues_mdl;
 		$result = $mdl->get_runrate_nodes_all();
-
+		$htm="";
 		foreach ($result as $k => $v) {
+			$id   = $v->id;
+			$sid  = $v->sid;
+			$pid  = $v->pid;
+			$lvl  = $v->level;
+			$ctyp = $v->ctype; 
 		
 			$col  = 0;
-			$lvl  = $v->level;
-			$columns = $this->get($col,$lvl);
-			array_push($rows,$columns);
+			$htm.=$this->get($id,$pid,$col,$lvl);
+			
 				
 		}
 
-		return $rows;
+		return $htm;
 
   }
   	public function set_header(){
@@ -119,8 +133,9 @@ class Revenues_01 extends MY_Controller {
   	}
 
     public function get_header(){
-  		$columns = array("REVENUE SUMMARY(in PHP 000s)");
+  		$columns = array("");
   		$col = 0;	
+  		$htm="<tr><th>REVENUE SUMMARY(in PHP 000s)</th>";
   		for($i=1;$i<=$this->monthNum;$i++){		
   				
   				$col = $col + 1;
@@ -138,15 +153,15 @@ class Revenues_01 extends MY_Controller {
 		        $vV  =  $this->sheet->getCell($vA)->getCalculatedValue();			
 		        $pV  =  $this->sheet->getCell($pA)->getCalculatedValue();
 
+		        $htm.="<th>".$rV."</th>";
+		        $htm.="<th>".$bV."</th>";
+		        $htm.="<th>".$vV."</th>";
+		        $htm.="<th>".$pV."</th>";
 
-				array_push($columns,$rV);
-				array_push($columns,$bV);
-				array_push($columns,$vV);
-				array_push($columns,$pV);
 
 		}
-		$header = array($columns);
-		return $header;
+		$htm.="</tr>";
+		return $htm;
   	}	
 
 	public function set($ctyp,$col,$id,$lvl){
@@ -181,13 +196,15 @@ class Revenues_01 extends MY_Controller {
 			}	
 
 	}
-	public function get($col,$lvl){
-		$columns = array();
+	public function get($id,$pid,$col,$lvl){
+		   $htm = "";
 
-		$sA   = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
+		    $sA   = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
 			$sV  =	$this->sheet->getCell($sA)->getCalculatedValue();
-			
-			array_push($columns,$sV);
+			 
+                 $htm.="<tr data-tt-id='".$id."' data-tt-parent-id='".$pid."'>";
+                 $htm.="<td >".$sV."</td>";
+
 			for($i=1;$i<=$this->monthNum;$i++){	
 			  
 			  $col = $col + 1;			
@@ -210,13 +227,58 @@ class Revenues_01 extends MY_Controller {
 		        $vV  =  $this->sheet->getCell($vA)->getCalculatedValue();			
 		        $pV  =  $this->sheet->getCell($pA)->getCalculatedValue();
 
-		        array_push($columns,$rV);
-		        array_push($columns,$bV);
-		        array_push($columns,$vV);
-		        array_push($columns,$pV);			
+		        $htm.="<td >".$rV."</td>";
+		        $htm.="<td >".$bV."</td>";
+		        $htm.="<td >".$vV."</td>";
+		        $htm.="<td >".$pV."</td>";
+		      			
 		
 			}
-			return $columns;	
+			$htm.="</tr>";
+			return $htm;	
+
+	}
+	public function get_footer(){
+		   $htm = "";
+		   	$col= 0;
+		   	$level = $this->lastRow + 1;
+		    $sA   = $this->sheet->getCellByColumnAndRow($col, $level)->getCoordinate();
+			$sV  =	$this->sheet->getCell($sA)->getCalculatedValue();
+			 
+                 $htm.="<tr>";
+                 $htm.="<th>".$sV."</th>";
+
+			for($i=1;$i<=$this->monthNum;$i++){	
+			  
+			  $col = $col + 1;			
+			  $rA  = $this->sheet->getCellByColumnAndRow($col, $level)->getCoordinate();
+
+			  
+			  $col = $col + 1;
+			  $bA  = $this->sheet->getCellByColumnAndRow($col, $level)->getCoordinate();			
+			 
+			  
+			  $col = $col + 1;
+			  $vA  = $this->sheet->getCellByColumnAndRow($col, $level)->getCoordinate();
+			
+			  $col = $col + 1;
+		      $pA  = $this->sheet->getCellByColumnAndRow($col, $level)->getCoordinate();
+
+
+				$rV  =	$this->sheet->getCell($rA)->getCalculatedValue();
+		        $bV  =  $this->sheet->getCell($bA)->getCalculatedValue();			
+		        $vV  =  $this->sheet->getCell($vA)->getCalculatedValue();			
+		        $pV  =  $this->sheet->getCell($pA)->getCalculatedValue();
+
+		        $htm.="<th>".$rV."</th>";
+		        $htm.="<th>".$bV."</th>";
+		        $htm.="<td>".$vV."</th>";
+		        $htm.="<td>".$pV."</th>";
+		      			
+		
+			}
+			$htm.="</tr>";
+			return $htm;	
 
 	}
 	public function ctype_formula($ctyp,$col,$id,$i,$cname){
@@ -297,6 +359,67 @@ class Revenues_01 extends MY_Controller {
 
 
 	}
+
+	public function set_footer(){
+	$level = $this->lastRow + 1;
+	$col = 0;
+               $sA  =  $this->sheet->getCellByColumnAndRow(0, $level)->getCoordinate();
+               $this->sheet->setCellValue($sA,"Total Revenues:");
+
+                 for($i=1;$i <= $this->monthNum;$i++){
+
+
+                 	
+					
+                 	 $col=$col+1;
+                
+ 		            $rA =   $this->sheet->getCellByColumnAndRow($col, $level)->getCoordinate();
+		            $rV = $this->total_formula($col);	
+	
+					$col=$col+1;
+
+		            $bA =   $this->sheet->getCellByColumnAndRow($col, $level)->getCoordinate();
+		            $bV = $this->total_formula($col);		
+	
+					$col=$col+1;
+						
+					$vA =   $this->sheet->getCellByColumnAndRow($col, $level)->getCoordinate();
+					$vV = "=IF(ISERROR(".$rA."-".$bA."),\"\",(".$rA."-".$bA."))";		            		
+
+					$col=$col+1;
+					
+					$pA =   $this->sheet->getCellByColumnAndRow($col, $level)->getCoordinate();
+		            $pV = "=IF(ISERROR(".$vA."/ABS(".$bA.")),\"\",(".$vA."/ABS(".$bA.")))";				
+
+
+		            			$this->sheet->setCellValue($rA,$rV);
+		            			$this->sheet->setCellValue($bA,$bV);
+		            			$this->sheet->setCellValue($vA,$vV);
+		            			$this->sheet->setCellValue($pA,$pV);
+					
+				}
+
+
+		}
+              
+		public function total_formula($col){
+		$mdl = $this->Revenues_mdl;
+		$node = $mdl->get_runrate_parents();
+
+		$rf = array();	
+		foreach ($node as $key => $value) {
+					  array_push($rf, $this->sheet->getCellByColumnAndRow($col, Intval($value->level))->getCoordinate());
+				
+		}
+		$data = "=SUM(".implode($rf, ",").")";	
+
+
+		return $data;	
+
+	   }
+
+
+
 
 	
 }

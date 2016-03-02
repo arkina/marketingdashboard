@@ -29,7 +29,7 @@ class Revenues_mdl  extends MY_Model {
 	
 
 	
-    public function get_runrate_subs_all() {
+    public function get_runrate_parents() {
     	
     		 $this->db->order_by("level","asc");
 
@@ -42,9 +42,7 @@ class Revenues_mdl  extends MY_Model {
 
 	 return $result;		
     }
-    public function get_formula(){
 
-    }
    
 
 
