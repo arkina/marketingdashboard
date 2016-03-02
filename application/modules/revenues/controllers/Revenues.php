@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Revenues extends MY_Controller {
 
-	
+	public $totalRow = array();
 	  function __construct()
     {
         // Call the Model constructor
@@ -24,7 +24,8 @@ class Revenues extends MY_Controller {
 	public function index(){
 					$this->load->view("runrate_revenues");
 	}
-	public function revTable(){
+
+	public function Issuer_Revenues(){
 		$tbody = "";
 		$mdl = $this->Revenues_mdl;
 
@@ -38,8 +39,35 @@ class Revenues extends MY_Controller {
 		$this->set_issuers_revenues();
 		$thead = $this->get_issuers_revenues();
 
+
+
+
+
+
 		 $json['tbody'] = $tbody;
 		 $json['thead'] = $thead;
+		 return $json;
+	}
+
+
+	public function revTable(){
+
+		$idata = $this->Issuer_Revenues();
+		$mdata = $this->Merch_Acqui();
+		$odata = $this->Other_Revenues();
+		$tdata = $this->Total_Revenues();
+
+		$json['ithead'] = $idata['thead'];
+		$json['itbody'] = $idata['tbody'];
+
+		$json['mthead'] = $mdata['thead'];
+		$json['mtbody'] = $mdata['tbody'];
+
+	    $json['othead'] = $odata['thead'];
+		$json['otbody'] = $odata['tbody'];
+
+		
+	    $json['tthead'] = $tdata['thead'];
 
 		 echo json_encode($json);
 		 exit;
@@ -70,6 +98,24 @@ flush();
 			//$tbody.=$this->get($nodes);
 		}
 		$this->set_issuers_revenues();
+
+		$nodes = $mdl->get_runrate_nodes_merchAcqui();
+	
+		if(count($nodes) > 0 ){
+
+			$this->set($nodes);
+			//$tbody.=$this->get($nodes);
+		}
+		$this->set_merchAqui_revenues();
+		$nodes = $mdl->get_runrate_nodes_others();
+	
+		if(count($nodes) > 0 ){
+
+			$this->set($nodes);
+			//$tbody.=$this->get($nodes);
+		}
+		$this->set_others_revenues();
+		$this->set_total();
 		//$thead = $this->get_issuers_revenues();
 
 		 //$json['tbody'] = $tbody;
@@ -249,56 +295,7 @@ public function setThead(){
 
 			return $htm;
 	}
-	public function set_issuers_revenues(){
-		   
-
-				$level = 0;
-				
-                 
-               $col = 0;
-               $sA =   $this->sheet->getCellByColumnAndRow(0, 2)->getCoordinate();
-                  $this->sheet->setCellValue($sA,"Issuer Revenues:");
-
-                 for($i=1;$i <= $this->monthNum;$i++){
-
-
-                 	$row = $level+2;
-					
-                 	 $col=$col+1;
-                 	$rev = $this->issuersRev_formula($col);
-                 	
-		          
-
-
- 		            $rA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
-		            		$this->sheet->setCellValue($rA,$rev);
 	
-
-					$col=$col+1;
-
-					$bud = $this->issuersRev_formula($col);
-		            $bA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
-		            		$this->sheet->setCellValue($bA,$bud);
-	
-					$col=$col+1;
-					$var = "=IF(ISERROR(".$rA."-".$bA."),\"\",(".$rA."-".$bA."))";	
-										$vA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
-							            		$this->sheet->setCellValue($vA,$var);
-
-					$col=$col+1;
-					$per = "=IF(ISERROR(".$vA."/ABS(".$bA.")),\"\",(".$vA."/ABS(".$bA.")))";	
-					$pA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
-		            		$this->sheet->setCellValue($pA,$per);	
-					
-				}
-
-		
-              
-
-
-			
-
-	}
 
 	public function get_issuers_revenues(){
 
@@ -348,19 +345,62 @@ public function setThead(){
 					$htm.="<th align='center'>".$pV."</th>";
 				}
 
-
-
-
-
-
-
-
                  $htm.="</tr>";
               
-                 	return $htm;
+              return $htm;
 	}
+public function set_issuers_revenues(){
+		   
 
-	public function issuersRev_formula($col){
+				$level = 0;
+				
+                 
+               $col = 0;
+               array_push($this->totalRow,2);
+               $sA =   $this->sheet->getCellByColumnAndRow(0, 2)->getCoordinate();
+                  $this->sheet->setCellValue($sA,"Issuer Revenues:");
+
+                 for($i=1;$i <= $this->monthNum;$i++){
+
+
+                 	$row = $level+2;
+					
+                 	 $col=$col+1;
+                 	$rev = $this->issuersRev_formula($col);
+                 	
+		          
+
+
+ 		            $rA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		            		$this->sheet->setCellValue($rA,$rev);
+	
+
+					$col=$col+1;
+
+					$bud = $this->issuersRev_formula($col);
+		            $bA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		            		$this->sheet->setCellValue($bA,$bud);
+	
+					$col=$col+1;
+					$var = "=IF(ISERROR(".$rA."-".$bA."),\"\",(".$rA."-".$bA."))";	
+										$vA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+							            		$this->sheet->setCellValue($vA,$var);
+
+					$col=$col+1;
+					$per = "=IF(ISERROR(".$vA."/ABS(".$bA.")),\"\",(".$vA."/ABS(".$bA.")))";	
+					$pA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		            		$this->sheet->setCellValue($pA,$per);	
+					
+				}
+
+		
+              
+
+
+			
+
+	}
+		public function issuersRev_formula($col){
 		$mdl = $this->Revenues_mdl;
 		$node = $mdl->get_runrate_subs_all();
 
@@ -375,6 +415,454 @@ public function setThead(){
 		return $data;	
 
 	}
+
+//===============================================================================
+	public function Merch_Acqui(){
+		$tbody = "";
+		$mdl = $this->Revenues_mdl;
+
+		$nodes = $mdl->get_runrate_nodes_merchAcqui();
+
+		if(count($nodes) > 0 ){
+
+			$this->set($nodes);
+			$tbody.=$this->get($nodes);
+		}
+		$this->set_merchAqui_revenues();
+		$thead = $this->get_merchAcui_revenues();
+
+
+
+
+
+
+		 $json['tbody'] = $tbody;
+		 $json['thead'] = $thead;
+		 return $json;
+	}
+
+public function set_merchAqui_revenues(){
+		   
+	$mdl = $this->Revenues_mdl;
+	$level = $mdl->get_merchaqui_firstrow()->level;
+
+				$level = $level-1;
+				
+                    array_push($this->totalRow,$level+2);
+               $col = 0;
+               $sA =   $this->sheet->getCellByColumnAndRow(0, $level+2)->getCoordinate();
+                  $this->sheet->setCellValue($sA,"Merch Acqui:");
+
+                 for($i=1;$i <= $this->monthNum;$i++){
+
+
+                 	$row = $level+2;
+					
+                 	 $col=$col+1;
+                 	$rev = $this->merchAcqui_formula($col);
+                 	
+		          
+
+
+ 		            $rA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		            		$this->sheet->setCellValue($rA,$rev);
+	
+
+					$col=$col+1;
+
+					$bud = $this->merchAcqui_formula($col);
+		            $bA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		            		$this->sheet->setCellValue($bA,$bud);
+	
+					$col=$col+1;
+					$var = "=IF(ISERROR(".$rA."-".$bA."),\"\",(".$rA."-".$bA."))";	
+										$vA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+							            		$this->sheet->setCellValue($vA,$var);
+
+					$col=$col+1;
+					$per = "=IF(ISERROR(".$vA."/ABS(".$bA.")),\"\",(".$vA."/ABS(".$bA.")))";	
+					$pA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		            		$this->sheet->setCellValue($pA,$per);	
+					
+				}
+
+		
+              
+
+
+			
+
+	}
+
+public function get_merchAcui_revenues(){
+	$mdl = $this->Revenues_mdl;
+	$level = $mdl->get_merchaqui_firstrow()->level;
+
+		   $htm ="<tr>";
+                 $htm.="<th >Merch Acqui:</th>";
+                 	$col = 0;
+                 	$level = $level-1;
+           
+
+                 for($i=1;$i <= $this->monthNum;$i++){
+
+
+                 	$row = $level+2;
+					
+                 	 $col=$col+1;
+                 
+
+		             $rA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		        
+		             $rV =	$this->sheet->getCell($rA)->getCalculatedValue();
+
+
+					$htm.="<th align='center'>".$rV."</th>";
+		
+					
+
+					$col=$col+1;
+
+		            $bA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		     
+		            $bV=	$this->sheet->getCell($bA)->getCalculatedValue();	
+
+					
+					$htm.="<th align='center'>".$bV."</th>";
+
+
+					$col=$col+1;
+				     $vA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		     
+		            $vV=	$this->sheet->getCell($vA)->getCalculatedValue();	
+
+					$htm.="<th align='center'>".$vV."</th>";	
+					$col=$col+1;
+					$pA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		     
+		            $pV=	$this->sheet->getCell($pA)->getCalculatedValue();	
+					$htm.="<th align='center'>".$pV."</th>";
+				}
+
+                 $htm.="</tr>";
+              
+              return $htm;
+	}
+
+
+	public function merchAcqui_formula($col){
+		$mdl = $this->Revenues_mdl;
+		$node = $mdl->get_runrate_subs_merchaqui();
+
+		$rf = array();	
+		foreach ($node as $key => $value) {
+					  array_push($rf, $this->sheet->getCellByColumnAndRow($col, Intval($value->level)+2)->getCoordinate());
+				
+		}
+		$data = "=SUM(".implode($rf, ",").")";	
+
+
+		return $data;	
+
+	}
+
+
+//=====================================================
+
+
+public function Other_Revenues(){
+		$tbody = "";
+		$mdl = $this->Revenues_mdl;
+
+		$nodes = $mdl->get_runrate_nodes_others();
+
+		if(count($nodes) > 0 ){
+
+			$this->set($nodes);
+			$tbody.=$this->get($nodes);
+		}
+		$this->set_others_revenues();
+		$thead = $this->get_others_revenues();
+
+
+
+
+
+
+		 $json['tbody'] = $tbody;
+		 $json['thead'] = $thead;
+		 return $json;
+	}
+
+public function set_others_revenues(){
+		   
+	$mdl = $this->Revenues_mdl;
+	$level = $mdl->get_others_firstrow()->level;
+
+				$level = $level-1;
+				
+                 array_push($this->totalRow, $level+2);
+               $col = 0;
+               $sA =   $this->sheet->getCellByColumnAndRow(0, $level+2)->getCoordinate();
+                  $this->sheet->setCellValue($sA,"Other Revenues:");
+
+                 for($i=1;$i <= $this->monthNum;$i++){
+
+
+                 	$row = $level+2;
+					
+                 	 $col=$col+1;
+                 	$rev = $this->others_formula($col);
+                 	
+		          
+
+
+ 		            $rA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		            		$this->sheet->setCellValue($rA,$rev);
+	
+
+					$col=$col+1;
+
+					$bud = $this->others_formula($col);
+		            $bA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		            		$this->sheet->setCellValue($bA,$bud);
+	
+					$col=$col+1;
+					$var = "=IF(ISERROR(".$rA."-".$bA."),\"\",(".$rA."-".$bA."))";	
+										$vA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+							            		$this->sheet->setCellValue($vA,$var);
+
+					$col=$col+1;
+					$per = "=IF(ISERROR(".$vA."/ABS(".$bA.")),\"\",(".$vA."/ABS(".$bA.")))";	
+					$pA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		            		$this->sheet->setCellValue($pA,$per);	
+					
+				}
+
+		
+              
+
+
+			
+
+	}
+
+public function get_others_revenues(){
+	$mdl = $this->Revenues_mdl;
+	$level = $mdl->get_others_firstrow()->level;
+
+		   $htm ="<tr>";
+                 $htm.="<th >Other Revenues:</th>";
+                 	$col = 0;
+                 	$level = $level-1;
+           
+
+                 for($i=1;$i <= $this->monthNum;$i++){
+
+
+                 	$row = $level+2;
+					
+                 	 $col=$col+1;
+                 
+
+		             $rA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		        
+		             $rV =	$this->sheet->getCell($rA)->getCalculatedValue();
+
+
+					$htm.="<th align='center'>".$rV."</th>";
+		
+					
+
+					$col=$col+1;
+
+		            $bA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		     
+		            $bV=	$this->sheet->getCell($bA)->getCalculatedValue();	
+
+					
+					$htm.="<th align='center'>".$bV."</th>";
+
+
+					$col=$col+1;
+				     $vA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		     
+		            $vV=	$this->sheet->getCell($vA)->getCalculatedValue();	
+
+					$htm.="<th align='center'>".$vV."</th>";	
+					$col=$col+1;
+					$pA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		     
+		            $pV=	$this->sheet->getCell($pA)->getCalculatedValue();	
+					$htm.="<th align='center'>".$pV."</th>";
+				}
+
+                 $htm.="</tr>";
+              
+              return $htm;
+	}
+
+
+	public function others_formula($col){
+		$mdl = $this->Revenues_mdl;
+		$node = $mdl->get_runrate_subs_others();
+
+		$rf = array();	
+		foreach ($node as $key => $value) {
+					  array_push($rf, $this->sheet->getCellByColumnAndRow($col, Intval($value->level)+2)->getCoordinate());
+				
+		}
+		$data = "=SUM(".implode($rf, ",").")";	
+
+
+		return $data;	
+
+	}
+
+
+public function set_total(){
+	$mdl = $this->Revenues_mdl;
+	$level = $mdl->get_lastrow()->rf;
+	$level = $level + 2; 
+
+	$col = 0;
+               $sA =   $this->sheet->getCellByColumnAndRow(0, $level+1)->getCoordinate();
+                  $this->sheet->setCellValue($sA,"Total Revenues:");
+
+                 for($i=1;$i <= $this->monthNum;$i++){
+
+
+                 	$row = $level+1;
+					
+                 	 $col=$col+1;
+                 	$rev = $this->total_formula($col);
+                 	
+		          
+
+
+ 		            $rA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		            		$this->sheet->setCellValue($rA,$rev);
+	
+
+					$col=$col+1;
+
+					$bud = $this->total_formula($col);
+		            $bA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		            		$this->sheet->setCellValue($bA,$bud);
+	
+					$col=$col+1;
+					$var = "=IF(ISERROR(".$rA."-".$bA."),\"\",(".$rA."-".$bA."))";	
+										$vA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+							            		$this->sheet->setCellValue($vA,$var);
+
+					$col=$col+1;
+					$per = "=IF(ISERROR(".$vA."/ABS(".$bA.")),\"\",(".$vA."/ABS(".$bA.")))";	
+					$pA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		            		$this->sheet->setCellValue($pA,$per);	
+					
+				}
+
+		
+              
+
+
+}
+public function get_total(){
+	$mdl = $this->Revenues_mdl;
+	$level = $mdl->get_lastrow()->rf;
+	$level = $level + 2; 
+
+		   $htm ="<tr>";
+                 $htm.="<th >Total Revenues:</th>";
+                 	$col = 0;
+              
+           
+                 	$row = $level+1;
+                 for($i=1;$i <= $this->monthNum;$i++){
+
+
+                 	
+					
+                 	 $col=$col+1;
+                 
+
+		             $rA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		        
+		             $rV =	$this->sheet->getCell($rA)->getCalculatedValue();
+
+
+					$htm.="<th align='center'>".$rV."</th>";
+		
+					
+
+					$col=$col+1;
+
+		            $bA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		     
+		            $bV=	$this->sheet->getCell($bA)->getCalculatedValue();	
+
+					
+					$htm.="<th align='center'>".$bV."</th>";
+
+
+					$col=$col+1;
+				     $vA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		     
+		            $vV=	$this->sheet->getCell($vA)->getCalculatedValue();	
+
+					$htm.="<th align='center'>".$vV."</th>";	
+					$col=$col+1;
+					$pA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		     
+		            $pV=	$this->sheet->getCell($pA)->getCalculatedValue();	
+					$htm.="<th align='center'>".$pV."</th>";
+				}
+
+                 $htm.="</tr>";
+              
+              return $htm;
+	}
+
+public function Total_Revenues(){
+	
+		$this->set_total();
+		$thead = $this->get_total();
+
+
+
+
+
+
+	
+		 $json['thead'] = $thead;
+		 return $json;
+	}
+
+public function total_formula($col){
+		
+		$node = $this->totalRow;
+
+		$rf = array();	
+		foreach ($node as $key => $value) {
+					  array_push($rf, $this->sheet->getCellByColumnAndRow($col, Intval($value))->getCoordinate());
+				
+		}
+		$data = "=SUM(".implode($rf, ",").")";	
+
+
+		return $data;	
+
+	}
+
+
+
+
+
+
+
+
+
+
 	public function ctype_formula($ctype,$col,$id,$i,$cname){
 
 		$dateObj   = DateTime::createFromFormat('!m', $i);

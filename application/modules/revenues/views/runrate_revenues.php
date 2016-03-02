@@ -57,16 +57,28 @@
                 <a href="./revenues/dlTablexls">Download</a>
 
                   <table id="revenueTbl">
-                  <thead>
+                  <thead id="first-head">
                     <tr><th >REVENUE SUMMARY (in PHP 000s)</th></tr>
                     
                   </thead>
-                  <tbody></tbody>
-                  
+                  <tbody id="first-body"></tbody>
+                  <thead id="second-head">
+ 
+                    
+                  </thead>
+                    <tbody id="second-body"></tbody>
+                    <thead id="third-head">
+ 
+                    
+                  </thead>
+                    <tbody id="third-body"></tbody>
+                      <thead id="fourth-head">
+ 
+                    
+                  </thead>
                   </table>
-                  
 
-    
+
       </div>
   
 
@@ -133,9 +145,19 @@ var monthInt =parseInt(Right(Left(d.yyyymmdd(),7),2));
               thead += "<th>" +get_month_name(i) +" %</th>";
           }
 
-  $("#revenueTbl > thead > tr:first-child").append(thead);
-   $("#revenueTbl > tbody").html(html.tbody);
-   $("#revenueTbl > thead").append(html.thead);
+  $("#revenueTbl > thead#first-head > tr:first-child").append(thead);
+   $("#revenueTbl > tbody#first-body").html(html.itbody);
+  
+   $("#revenueTbl > thead#first-head").append(html.ithead);
+
+   $("#revenueTbl > tbody#second-body").html(html.mtbody);
+  
+   $("#revenueTbl > thead#second-head").append(html.mthead);
+
+   $("#revenueTbl > tbody#third-body").html(html.otbody);
+  
+   $("#revenueTbl > thead#third-head").append(html.othead);
+   $("#revenueTbl > thead#fourth-head").append(html.tthead);
 
     $("#revenueTbl").treetable({ expandable: true });
 			
