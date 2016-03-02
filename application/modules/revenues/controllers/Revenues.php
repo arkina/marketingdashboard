@@ -22,33 +22,8 @@ class Revenues extends MY_Controller {
     
 
 	public function index(){
-					$this->load->view("runrate_revenues");
+		$this->load->view("runrate_revenues");
 	}
-
-	public function Issuer_Revenues(){
-		$tbody = "";
-		$mdl = $this->Revenues_mdl;
-
-		$nodes = $mdl->get_runrate_nodes_all();
-
-		if(count($nodes) > 0 ){
-
-			$this->set($nodes);
-			$tbody.=$this->get($nodes);
-		}
-		$this->set_issuers_revenues();
-		$thead = $this->get_issuers_revenues();
-
-
-
-
-
-
-		 $json['tbody'] = $tbody;
-		 $json['thead'] = $thead;
-		 return $json;
-	}
-
 
 	public function revTable(){
 
@@ -66,13 +41,80 @@ class Revenues extends MY_Controller {
 	    $json['othead'] = $odata['thead'];
 		$json['otbody'] = $odata['tbody'];
 
-		
 	    $json['tthead'] = $tdata['thead'];
 
 		 echo json_encode($json);
 		 exit;
 
 	}
+
+	public function Issuer_Revenues(){
+		$tbody = "";
+		$mdl = $this->Revenues_mdl;
+
+		$nodes = $mdl->get_runrate_nodes_all();
+
+		if(count($nodes) > 0 ){
+
+			$this->set($nodes);
+			$tbody.=$this->get($nodes);
+		}
+		$this->set_issuers_revenues();
+		$thead = $this->get_issuers_revenues();
+
+		$json['tbody'] = $tbody;
+		$json['thead'] = $thead;
+		 return $json;
+	}
+
+	public function Merch_Acqui(){
+		$tbody = "";
+		$mdl = $this->Revenues_mdl;
+
+		$nodes = $mdl->get_runrate_nodes_merchAcqui();
+
+		if(count($nodes) > 0 ){
+
+			$this->set($nodes);
+			$tbody.=$this->get($nodes);
+		}
+		$this->set_merchAqui_revenues();
+		$thead = $this->get_merchAcui_revenues();
+
+		 $json['tbody'] = $tbody;
+		 $json['thead'] = $thead;
+		 return $json;
+	}
+
+	public function Other_Revenues(){
+		$tbody = "";
+		$mdl = $this->Revenues_mdl;
+
+		$nodes = $mdl->get_runrate_nodes_others();
+
+		if(count($nodes) > 0 ){
+
+			$this->set($nodes);
+			$tbody.=$this->get($nodes);
+		}
+		$this->set_others_revenues();
+		$thead = $this->get_others_revenues();
+
+		 $json['tbody'] = $tbody;
+		 $json['thead'] = $thead;
+		 return $json;
+	}
+
+
+	public function Total_Revenues(){
+	
+		$this->set_total();
+		$thead = $this->get_total();
+
+		 $json['thead'] = $thead;
+		 return $json;
+	}
+	
 
 
 
@@ -133,30 +175,29 @@ public function setThead(){
 	$col = 0;
 	$row = 1;
 
-//$this->sheet->getCellByColumnAndRow($col, $row)->setCellValue("REVENUE SUMMARY(in PHP 000s)");
-             $sA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+          $sA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
                   $this->sheet->setCellValue($sA,"REVENUE SUMMARY(in PHP 000s)");
 
- for($i=1;$i <= $this->monthNum;$i++){
-		$dateObj   = DateTime::createFromFormat('!m', $i);
-				 		$monthName = $dateObj->format('M'); 
-		$col=$col+1;
-		$rA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
-                  $this->sheet->setCellValue($rA,$monthName." Rev");
-		$col=$col+1;		 		
-			$bA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
-                  $this->sheet->setCellValue($bA,$monthName." Bud");
+		 	for($i=1;$i <= $this->monthNum;$i++){
+				$dateObj   = DateTime::createFromFormat('!m', $i);
+						 		$monthName = $dateObj->format('M'); 
+				$col=$col+1;
+				$rA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		                  $this->sheet->setCellValue($rA,$monthName." Rev");
+				$col=$col+1;		 		
+					$bA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		                  $this->sheet->setCellValue($bA,$monthName." Bud");
 
-		$col=$col+1;		 		
-		$vA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
-                  $this->sheet->setCellValue($vA,$monthName." Var");
-         $col=$col+1;         		 		
-		$pA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
-                  $this->sheet->setCellValue($pA,$monthName." %");
-                  	 		
+				$col=$col+1;		 		
+				$vA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		                  $this->sheet->setCellValue($vA,$monthName." Var");
+		         $col=$col+1;         		 		
+				$pA =   $this->sheet->getCellByColumnAndRow($col, $row)->getCoordinate();
+		                  $this->sheet->setCellValue($pA,$monthName." %");
+		                  	 		
 
 
-	 }
+			}
 
 
 }
@@ -417,30 +458,7 @@ public function set_issuers_revenues(){
 	}
 
 //===============================================================================
-	public function Merch_Acqui(){
-		$tbody = "";
-		$mdl = $this->Revenues_mdl;
-
-		$nodes = $mdl->get_runrate_nodes_merchAcqui();
-
-		if(count($nodes) > 0 ){
-
-			$this->set($nodes);
-			$tbody.=$this->get($nodes);
-		}
-		$this->set_merchAqui_revenues();
-		$thead = $this->get_merchAcui_revenues();
-
-
-
-
-
-
-		 $json['tbody'] = $tbody;
-		 $json['thead'] = $thead;
-		 return $json;
-	}
-
+	
 public function set_merchAqui_revenues(){
 		   
 	$mdl = $this->Revenues_mdl;
@@ -501,7 +519,7 @@ public function get_merchAcui_revenues(){
 		   $htm ="<tr>";
                  $htm.="<th >Merch Acqui:</th>";
                  	$col = 0;
-                 	$level = $level-1;
+                 	$level = $level;
            
 
                  for($i=1;$i <= $this->monthNum;$i++){
@@ -570,36 +588,12 @@ public function get_merchAcui_revenues(){
 //=====================================================
 
 
-public function Other_Revenues(){
-		$tbody = "";
-		$mdl = $this->Revenues_mdl;
-
-		$nodes = $mdl->get_runrate_nodes_others();
-
-		if(count($nodes) > 0 ){
-
-			$this->set($nodes);
-			$tbody.=$this->get($nodes);
-		}
-		$this->set_others_revenues();
-		$thead = $this->get_others_revenues();
-
-
-
-
-
-
-		 $json['tbody'] = $tbody;
-		 $json['thead'] = $thead;
-		 return $json;
-	}
-
 public function set_others_revenues(){
 		   
 	$mdl = $this->Revenues_mdl;
 	$level = $mdl->get_others_firstrow()->level;
 
-				$level = $level-1;
+				$level = $level;
 				
                  array_push($this->totalRow, $level+2);
                $col = 0;
@@ -823,20 +817,7 @@ public function get_total(){
               return $htm;
 	}
 
-public function Total_Revenues(){
-	
-		$this->set_total();
-		$thead = $this->get_total();
 
-
-
-
-
-
-	
-		 $json['thead'] = $thead;
-		 return $json;
-	}
 
 public function total_formula($col){
 		

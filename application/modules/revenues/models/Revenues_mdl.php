@@ -16,7 +16,7 @@ class Revenues_mdl  extends MY_Model {
      
     public function get_runrate_nodes_all() {
     		 $this->db->order_by("level","asc");
-    		 $nodeId = array(108, 109,111,112,113,114,115);
+    		 $nodeId = array(108, 109,110,111,112,113,114,115);
 			$this->db->where_not_in('id', $nodeId);
     $query = $this->db->get("runrate_nodes");
        
