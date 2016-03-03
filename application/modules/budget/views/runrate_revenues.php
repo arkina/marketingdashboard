@@ -4,12 +4,6 @@
   <meta charset="utf-8">
   <title>Marketing Dashboard(Runrate)</title>
 
-
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="<?php echo base_url();?>assets/bootstrap-3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet" href="<?php echo base_url();?>assets/bootstrap-3.3.6/css/bootstrap-theme.min.css">
-<link rel="stylesheet" href="<?php echo base_url();?>assets/bootstrap-3.3.6/css/fileinput.min.css">
-  <!-- Jqtreetable -->
   <!-- Jqtreetable -->
  
   <link rel="stylesheet" media="screen" href="<?php echo base_url();?>assets/jqtreetable/jquery.treetable.css">
@@ -38,27 +32,9 @@
   <script src="<?php echo base_url();?>assets/handsontable/highlight.pack.js"></script-->
 
 
-<style type="text/css">
-.btn-file {
-    position: relative;
-    overflow: hidden;
-}
-.btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
-}
-</style>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="<?php echo base_url();?>assets/bootstrap-3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="<?php echo base_url();?>assets/bootstrap-3.3.6/css/bootstrap-theme.min.css">
 
 </head>
 <body style="">
@@ -70,24 +46,9 @@
               <h2>Runrate</h2>
               
            
-              
+                <a href="./revenues_01/download">Download</a>
 
-                <ol class="breadcrumb">
-                  <li><a href="./revenues_01/download">Download Revenue</a></li>
-                  <li> <a href="./budget/download">Download Budget</a></li>
-               </ol>
-
-<?php
-// echo form_open_multipart('./budget/uploadxlsx',array('class'=>"form-vertical",'role'=>"form"));
-?>
-
-<label class="control-label">Upload Budget File</label>
-  <input id="input-700" name="budget-input-700" type="file" type="file"   class="file file-loading" data-show-preview="false" data-allowed-file-extensions='["xlsx"]'>
-
-
-<!--/form-->
-
-                  <table id="revenueTbl" class="table table-striped table-bordered">
+                  <table id="revenueTbl">
                   <thead id="first-head">
                     <?php echo $header;?>
                     
@@ -108,17 +69,9 @@
   </div>
 </div>
 
-
-
 <script data-jsfiddle="common" src="<?php echo base_url();?>assets/jquery-1.10.2.js"></script>
-<script src="<?php echo base_url();?>assets/bootstrap-3.3.6/js/bootstrap.min.js" ></script>
-<script src="<?php echo base_url();?>assets/bootstrap-3.3.6/js/fileinput.min.js" ></script>
 <script src="<?php echo base_url();?>assets/jqtreetable/jquery.treetable.js"></script>
-
-
-
-
-
+<script src="<?php echo base_url();?>assets/bootstrap-3.3.6/js/bootstrap.min.js" ></script>
  <script >
 
 
@@ -163,17 +116,10 @@ function Right(str, n){
      return monthNames[parseInt(m-1)];
    }       
 
-//$("#input-1").fileinput();
 
-
-
-   $("#input-700").fileinput({
-        uploadUrl: "./budget/uploadxlsx", // server upload action
-        uploadAsync: true,
-        maxFileCount: 1
-    });
     $("#revenueTbl").treetable({ expandable: true });
 			
+
 
 
 

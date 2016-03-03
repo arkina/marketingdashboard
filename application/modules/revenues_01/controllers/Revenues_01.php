@@ -3,7 +3,9 @@
 class Revenues_01 extends MY_Controller {
 
 	public $totalRow = array();
-	public $lastRow;	
+	public $lastRow;
+
+
 	  function __construct()
     {
         // Call the Model constructor
@@ -80,8 +82,9 @@ class Revenues_01 extends MY_Controller {
 			$col  = 0;
 			$sA   = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
 			$this->sheet->setCellValue($sA,$name);
-			$this->sheet->getStyle($sA)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT)->setIndent(intval($depth));
-				$this->set($ctyp,$col,$id,$lvl);
+			$this->sheet->getStyle($sA)->getAlignment()->setIndent(intval($depth));
+			
+			$this->set($ctyp,$col,$id,$lvl);
 				
 		}
 
@@ -120,10 +123,12 @@ class Revenues_01 extends MY_Controller {
   				$dateObj   = DateTime::createFromFormat('!m', $i);
 				$monthName = $dateObj->format('M');
 
-					array_push($columns,$monthName." Rev");
-					array_push($columns,$monthName." Bud");
-					array_push($columns,$monthName." Var");
-					array_push($columns,$monthName." %");
+					array_push($columns,$monthName."Est");
+					array_push($columns,$monthName."Bud");
+					array_push($columns,"MTD Var");
+					array_push($columns," %");
+					array_push($columns,$monthName." YTD Est");
+			
 
 		}
 		foreach ($columns as $k => $v) {
@@ -146,17 +151,21 @@ class Revenues_01 extends MY_Controller {
 				$vA  = $this->sheet->getCellByColumnAndRow($col, 1)->getCoordinate();
 				$col = $col + 1;
 				$pA  = $this->sheet->getCellByColumnAndRow($col, 1)->getCoordinate();
+				$col = $col + 1;
+				$yA  = $this->sheet->getCellByColumnAndRow($col, 1)->getCoordinate();
 
 
 				$rV  =	$this->sheet->getCell($rA)->getCalculatedValue();
 		        $bV  =  $this->sheet->getCell($bA)->getCalculatedValue();			
 		        $vV  =  $this->sheet->getCell($vA)->getCalculatedValue();			
 		        $pV  =  $this->sheet->getCell($pA)->getCalculatedValue();
+		        $yV  =  $this->sheet->getCell($yA)->getCalculatedValue();
 
 		        $htm.="<th>".$rV."</th>";
 		        $htm.="<th>".$bV."</th>";
 		        $htm.="<th>".$vV."</th>";
 		        $htm.="<th>".$pV."</th>";
+		        $htm.="<th>".$yV."</th>";
 
 
 		}
@@ -166,7 +175,7 @@ class Revenues_01 extends MY_Controller {
 
 	public function set($ctyp,$col,$id,$lvl){
 
-		
+		$ytd = array();
 			for($i=1;$i<=$this->monthNum;$i++){	
 			  
 			  $col = $col + 1;			
@@ -179,17 +188,23 @@ class Revenues_01 extends MY_Controller {
 			  
 			  $col = $col + 1;
 			  $vA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
-			  $vV  = "=IF(ISERROR(".$rA."-".$bA."),\"\",(".$rA."-".$bA."))";	
+			  $vV  = "=IF(ISERROR(".$rA."-".$bA."),0,(".$rA."-".$bA."))";	
 			  
 			  $col = $col + 1;
 		      $pA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
-		      $pV  = "=IF(ISERROR(".$vA."/ABS(".$bA.")),\"\",(".$vA."/ABS(".$bA.")))";	
+		      $pV  = "=IF(ISERROR(".$vA."/ABS(".$bA.")),0,(".$vA."/ABS(".$bA.")))";	
+
+		      $col = $col + 1;
+		      $yA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
+		        array_push($ytd,$rA);
+		      $yV  = "=SUM(".implode($ytd,",").")";	
 
 
 					$this->sheet->setCellValue($rA,$rV);
 		            $this->sheet->setCellValue($bA,$bV);			
 		            $this->sheet->setCellValue($vA,$vV);			
 		            $this->sheet->setCellValue($pA,$pV);			
+		            $this->sheet->setCellValue($yA,$yV);			
 		
 			  
 
@@ -221,16 +236,21 @@ class Revenues_01 extends MY_Controller {
 			  $col = $col + 1;
 		      $pA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
 
+		      $col = $col + 1;
+		      $yA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
+
 
 				$rV  =	$this->sheet->getCell($rA)->getCalculatedValue();
 		        $bV  =  $this->sheet->getCell($bA)->getCalculatedValue();			
 		        $vV  =  $this->sheet->getCell($vA)->getCalculatedValue();			
 		        $pV  =  $this->sheet->getCell($pA)->getCalculatedValue();
+		        $yV  =  $this->sheet->getCell($yA)->getCalculatedValue();
 
-		        $htm.="<td >".$rV."</td>";
-		        $htm.="<td >".$bV."</td>";
-		        $htm.="<td >".$vV."</td>";
-		        $htm.="<td >".$pV."</td>";
+		        $htm.="<td align='right'>".$rV."</td>";
+		        $htm.="<td align='right'>".$bV."</td>";
+		        $htm.="<td align='right'>".$vV."</td>";
+		        $htm.="<td align='right'>".$pV."</td>";
+		        $htm.="<td align='right'>".$yV."</td>";
 		      			
 		
 			}
@@ -263,17 +283,21 @@ class Revenues_01 extends MY_Controller {
 			
 			  $col = $col + 1;
 		      $pA  = $this->sheet->getCellByColumnAndRow($col, $level)->getCoordinate();
+		      $col = $col + 1;
+		      $yA  = $this->sheet->getCellByColumnAndRow($col, $level)->getCoordinate();
 
 
 				$rV  =	$this->sheet->getCell($rA)->getCalculatedValue();
 		        $bV  =  $this->sheet->getCell($bA)->getCalculatedValue();			
 		        $vV  =  $this->sheet->getCell($vA)->getCalculatedValue();			
 		        $pV  =  $this->sheet->getCell($pA)->getCalculatedValue();
+		        $yV  =  $this->sheet->getCell($pA)->getCalculatedValue();
 
-		        $htm.="<th>".$rV."</th>";
-		        $htm.="<th>".$bV."</th>";
-		        $htm.="<td>".$vV."</th>";
-		        $htm.="<td>".$pV."</th>";
+		        $htm.="<th align='center'>".$rV."</th>";
+		        $htm.="<th align='center'>".$bV."</th>";
+		        $htm.="<th align='center'>".$vV."</th>";
+		        $htm.="<th align='center'>".$pV."</th>";
+		        $htm.="<th align='center'>".$yV."</th>";
 		      			
 		
 			}
@@ -365,7 +389,7 @@ class Revenues_01 extends MY_Controller {
 	$col = 0;
                $sA  =  $this->sheet->getCellByColumnAndRow(0, $level)->getCoordinate();
                $this->sheet->setCellValue($sA,"Total Revenues:");
-
+		$ytd = array();
                  for($i=1;$i <= $this->monthNum;$i++){
 
 
@@ -384,18 +408,24 @@ class Revenues_01 extends MY_Controller {
 					$col=$col+1;
 						
 					$vA =   $this->sheet->getCellByColumnAndRow($col, $level)->getCoordinate();
-					$vV = "=IF(ISERROR(".$rA."-".$bA."),\"\",(".$rA."-".$bA."))";		            		
+					$vV = "=IF(ISERROR(".$rA."-".$bA."),0,(".$rA."-".$bA."))";		            		
 
 					$col=$col+1;
 					
 					$pA =   $this->sheet->getCellByColumnAndRow($col, $level)->getCoordinate();
-		            $pV = "=IF(ISERROR(".$vA."/ABS(".$bA.")),\"\",(".$vA."/ABS(".$bA.")))";				
+		            $pV = "=IF(ISERROR(".$vA."/ABS(".$bA.")),0,(".$vA."/ABS(".$bA.")))";
 
+		            $col=$col+1;
+					
+					$yA =   $this->sheet->getCellByColumnAndRow($col, $level)->getCoordinate();				
+		              array_push($ytd,$rA);
+		      			$yV  = "=SUM(".implode($ytd,",").")";	
 
 		            			$this->sheet->setCellValue($rA,$rV);
 		            			$this->sheet->setCellValue($bA,$bV);
 		            			$this->sheet->setCellValue($vA,$vV);
 		            			$this->sheet->setCellValue($pA,$pV);
+		            			$this->sheet->setCellValue($yA,$yV);
 					
 				}
 
