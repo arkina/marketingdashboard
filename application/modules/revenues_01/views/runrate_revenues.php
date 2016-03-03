@@ -87,7 +87,7 @@
 
 <!--/form-->
 
-                  <table id="revenueTbl" class="table table-striped table-bordered">
+                  <table id="revenueTbl" class="table table-striped table-bordered table-fixed">
                   <thead id="first-head">
                     <?php echo $header;?>
                     
@@ -172,9 +172,13 @@ function Right(str, n){
         uploadAsync: true,
         maxFileCount: 1
     });
-    $("#revenueTbl").treetable({ expandable: true });
-			
+    //$("#revenueTbl").treetable({ expandable: true,"expandAll":true });
+			$("#revenueTbl").treetable({ expandable: true, initialState: "expanded " });
 
+$("#revenueTbl tbody").on("mousedown", "tr", function() {
+  $(".selected").not(this).removeClass("selected");
+  $(this).toggleClass("selected");
+});
 
 
               </script>
