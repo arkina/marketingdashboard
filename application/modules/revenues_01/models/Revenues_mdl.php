@@ -14,9 +14,9 @@ class Revenues_mdl  extends MY_Model {
 	 return $result;		
     }
      
-    public function get_runrate_nodes_all() {
+    public function get_runrate_nodes_all($reportType) {
     		 $this->db->order_by("level","asc");
-    $query = $this->db->get("runrate_nodes");
+    $query = $this->db->get_where("runrate_nodes",array('reporttype'=>$reportType));
        
     		$result = (object)array();
     		if($query->num_rows() > 0){
@@ -29,11 +29,11 @@ class Revenues_mdl  extends MY_Model {
 	
 
 	
-    public function get_runrate_parents() {
+    public function get_runrate_parents($reportType) {
     	
     		 $this->db->order_by("level","asc");
 
-    $query = $this->db->get_where("runrate_nodes",array('pid'=>0));
+    $query = $this->db->get_where("runrate_nodes",array('pid'=>0,'reporttype'=>$reportType));
       		
     		$result = (object)array();
     		if($query->num_rows() > 0){

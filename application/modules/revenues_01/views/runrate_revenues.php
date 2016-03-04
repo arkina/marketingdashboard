@@ -39,25 +39,10 @@
 
 
 <style type="text/css">
-.btn-file {
-    position: relative;
-    overflow: hidden;
-}
-.btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
-}
+#parent {
+        height: 400px;
+      }
+      
 </style>
 
 </head>
@@ -87,20 +72,34 @@
 
 <!--/form-->
 
-                  <table id="revenueTbl" class="table table-striped table-bordered table-fixed">
-                  <thead id="first-head">
-                    <?php echo $header;?>
-                    
-                  </thead>
-                  <tbody id="first-body">
-                    <?php echo $body;?>
-                  </tbody>
-                    <thead>
-                    <?php echo $footer;?>
-                    
-                  </thead>
-                   </table>
-
+<!--========================================Revenues====================================================-->
+                              <table id="revenueTbl" class="table table-striped table-bordered " >
+                              <thead id="first-head" >
+                                <?php echo $header;?>
+                                
+                              </thead>
+                              <tbody id="first-body">
+                                <?php echo $body;?>
+                              </tbody>
+                                <tfoot>
+                                <?php echo $footer;?>
+                                
+                              </tfoot>
+                               </table>
+<!--========================================Acqui====================================================-->
+                              <table id="revenueTbl" class="revenueTbl table table-striped table-bordered " >
+                              <thead id="first-head" >
+                                <?php echo $acqui_header;?>
+                                
+                              </thead>
+                              <tbody id="first-body">
+                                <?php echo $acqui_body;?>
+                              </tbody>
+                                <tfoot>
+                                <?php //echo $footer;?>
+                                
+                              </tfoot>
+                               </table>
 
       </div>
   
@@ -114,6 +113,8 @@
 <script src="<?php echo base_url();?>assets/bootstrap-3.3.6/js/bootstrap.min.js" ></script>
 <script src="<?php echo base_url();?>assets/bootstrap-3.3.6/js/fileinput.min.js" ></script>
 <script src="<?php echo base_url();?>assets/jqtreetable/jquery.treetable.js"></script>
+<script src="<?php echo base_url();?>assets/jqtreetable/tableHeadFixer.js"></script>
+
 
 
 
@@ -165,7 +166,7 @@ function Right(str, n){
 
 //$("#input-1").fileinput();
 
-
+var $table = $('table#revenueTbl');
 
    $("#input-700").fileinput({
         uploadUrl: "./budget/uploadxlsx", // server upload action
@@ -173,13 +174,16 @@ function Right(str, n){
         maxFileCount: 1
     });
     //$("#revenueTbl").treetable({ expandable: true,"expandAll":true });
-			$("#revenueTbl").treetable({ expandable: true, initialState: "expanded " });
+			$table.treetable({ expandable: true });
+     // $table.tableHeadFixer({"left" : 1,foot: true}); 
+      $table.find("tbody").on("mousedown", "tr", function() {
+          $(".selected").not(this).removeClass("selected");
+          $(this).toggleClass("selected");
+      });
 
-$("#revenueTbl tbody").on("mousedown", "tr", function() {
-  $(".selected").not(this).removeClass("selected");
-  $(this).toggleClass("selected");
-});
 
+
+//$table.floatThead();
 
               </script>
   
