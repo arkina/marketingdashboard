@@ -100,6 +100,35 @@
                                 
                               </tfoot>
                                </table>
+<!--========================================Acqui====================================================-->
+                              <table id="revenueTbl" class="revenueTbl table table-striped table-bordered " >
+                              <thead id="first-head" >
+                                <?php echo $activesubs_header;?>
+                                
+                              </thead>
+                              <tbody id="first-body">
+                                <?php echo $activesubs_body;?>
+                              </tbody>
+                                <tfoot>
+                                <?php //echo $footer;?>
+                                
+                              </tfoot>
+                               </table>
+
+                               <!--========================================Acqui====================================================-->
+                              <table id="revenueTbl" class="revenueTbl table table-striped table-bordered " >
+                              <thead id="first-head" >
+                                <?php echo $arpu_header;?>
+                                
+                              </thead>
+                              <tbody id="first-body">
+                                <?php echo $arpu_body;?>
+                              </tbody>
+                                <tfoot>
+                                <?php //echo $footer;?>
+                                
+                              </tfoot>
+                               </table>
 
       </div>
   
@@ -174,7 +203,7 @@ var $table = $('table#revenueTbl');
         maxFileCount: 1
     });
     //$("#revenueTbl").treetable({ expandable: true,"expandAll":true });
-			$table.treetable({ expandable: true });
+			$table.treetable({ expandable: true, column:0 });
      // $table.tableHeadFixer({"left" : 1,foot: true}); 
       $table.find("tbody").on("mousedown", "tr", function() {
           $(".selected").not(this).removeClass("selected");

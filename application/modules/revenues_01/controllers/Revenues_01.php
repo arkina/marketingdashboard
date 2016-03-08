@@ -41,11 +41,184 @@ class Revenues_01 extends MY_Controller {
 
 	  	$data['acqui_header'] = $this->get_header(1);
 	    $data['acqui_body']   = $this->get_body(1);  
+
+	     $this->lastRow = $this->lastRow + 1;
+
+	    $this->set_header(2);
+	    $this->set_body(2);	
+
+	  	 $data['activesubs_header'] = $this->get_header(2);
+	     $data['activesubs_body']   = $this->get_body(2);  
+
+	    $this->lastRow = $this->lastRow + 1;
+
+	    $this->set_header(3);
+	    $this->set_ARPU(2);	
+
+	  	 $data['arpu_header'] = $this->get_header(2);
+	     $data['arpu_body']   = $this->get_ARPU();  
 	  
 
 	     $this->load->view("runrate_revenues",$data);	
 	
     }
+    public function set_ARPU(){
+    	$lvl = $this->lastRow + 1;
+    	$arpu[0] = array('name'=>"PAYROLL ARPU",'ids'=>array(8,9,10,11,12,13,14,15,16,17,18,20,21,22,24),'id'=>198);
+    	$arpu[1] = array('name'=>"LOANS ARPU",'ids'=>array(39,40,41,42,43,44,45,46,47,48,49,51,52,53,55),'id'=>199);
+    	$arpu[2] = array('name'=>"ALLOWANCE ARPU",'ids'=>array(71,72,73,74,75,76,77,78,79,80,81,83,84,85,87),'id'=>200);
+    	$arpu[3] = array('name'=>"REGULAR ARPU",'ids'=>array(133,134,135,136,137,138,139,140,141,142,143,144,145,146,147),'id'=>201);
+    	$arpu[4] = array('name'=>"GLOBE CHARGE ARPU",'ids'=>array(180),'id'=>202);
+		
+		foreach ($arpu as $key => $value) {
+			$lvl = $lvl + 1;
+			 $name  = $value['name'];
+			 $ids = $value['ids'];
+			 $id  = $value['id'];
+			 $col = 0 ;
+			 $col;
+
+	 			$sA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
+	 	
+	 			$sV = $name;	
+			       $this->sheet->setCellValue($sA,$sV);
+			for($i=1;$i<=$this->monthNum;$i++){	
+
+
+			  $col = $col + 1;			
+			  $rA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();			  			 
+			  $rV  = $this->get_ARPU_nodes($col,$ids,$id);
+
+			  
+			  $col = $col + 1;
+			  $bA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();						 
+			  $bV  = 0;
+			  
+			  $col = $col + 1;	
+			  $vA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();					 
+			  $vV  = "=IF(ISERROR(".$rA."-".$bA."),0,(".$rA."-".$bA."))";	
+			  
+		
+			  $col = $col + 1;
+			  $pA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();						 
+			  $pV  = "=IF(ISERROR(".$vA."/ABS(".$bA.")),0,(".$vA."/ABS(".$bA.")))";	
+
+
+			  $col  = $col + 1;
+			  $yA   = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();						 
+			  $yV   = 0;
+			  
+			  $col  = $col + 1;
+			  $ybA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();							 
+			  $ybV  = 0;
+			  
+			  $col  = $col + 1;						 
+			  $yvA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();	
+			  $yvV  = 0;
+			  
+			  $col  = $col + 1;						 
+			  $ypA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();	
+			  $ypV  = 0;
+
+
+
+
+					$this->sheet->setCellValue($rA,$rV);
+		            $this->sheet->setCellValue($bA,$bV);			
+		            $this->sheet->setCellValue($vA,$vV);			
+		            $this->sheet->setCellValue($pA,$pV);			
+		            $this->sheet->setCellValue($yA,$yV);			
+		            $this->sheet->setCellValue($ybA,$ybV);			
+		            $this->sheet->setCellValue($yvA,$yvV);			
+		            $this->sheet->setCellValue($ypA,$ypV);	
+			
+
+			 
+
+			}	
+			
+		}
+
+
+    	
+
+    }
+
+    	public function get_ARPU(){
+		 $htm = "";
+
+		$lvl = $this->lastRow+1;
+    	$arpu[0] = array('name'=>"PAYROLL ARPU",'ids'=>array(8,9,10,11,12,13,14,15,16,17,18,20,21,22,24),'id'=>198);
+    	$arpu[1] = array('name'=>"LOANS ARPU",'ids'=>array(39,40,41,42,43,44,45,46,47,48,49,51,52,53,55),'id'=>199);
+    	$arpu[2] = array('name'=>"ALLOWANCE ARPU",'ids'=>array(71,72,73,74,75,76,77,78,79,80,81,83,84,85,87),'id'=>200);
+    	$arpu[3] = array('name'=>"REGULAR ARPU",'ids'=>array(133,134,135,136,137,138,139,140,141,142,143,144,145,146,147),'id'=>201);
+    	$arpu[4] = array('name'=>"GLOBE CHARGE ARPU",'ids'=>array(180),'id'=>202);
+		
+		foreach ($arpu as $key => $value) {
+			$lvl = $lvl +1;
+			$col = 0;
+		    $sA   = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
+			$sV  =	$this->sheet->getCell($sA)->getCalculatedValue();
+			 
+                 $htm.="<tr data-tt-id='".$lvl."' data-tt-parent-id='".$lvl."'>";
+                 $htm.="<td nowrap>".$sV."</td>";
+
+			for($i=1;$i<=$this->monthNum;$i++){	
+			  
+			  $col = $col + 1;			
+			  $rA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
+
+			  
+			  $col = $col + 1;
+			  $bA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();			
+			 
+			  
+			  $col = $col + 1;
+			  $vA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
+			
+			  $col = $col + 1;
+		      $pA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
+
+		      $col = $col + 1;
+		      $yA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
+
+
+		      $col = $col + 1;
+		      $ybA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
+
+			  $col = $col + 1;
+		      $yvA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
+
+		      $col = $col + 1;
+		      $ypA  = $this->sheet->getCellByColumnAndRow($col, $lvl)->getCoordinate();
+	
+
+
+				$rV  =	$this->sheet->getCell($rA)->getCalculatedValue();
+		        $bV  =  $this->sheet->getCell($bA)->getCalculatedValue();			
+		        $vV  =  $this->sheet->getCell($vA)->getCalculatedValue();			
+		        $pV  =  $this->sheet->getCell($pA)->getCalculatedValue();
+		        $yV  =  $this->sheet->getCell($yA)->getCalculatedValue();
+		        $ybV  =  $this->sheet->getCell($ybA)->getCalculatedValue();
+		        $yvV  =  $this->sheet->getCell($yvA)->getCalculatedValue();
+		        $ypV  =  $this->sheet->getCell($ypA)->getCalculatedValue();
+
+		        $htm.="<td align='right'>".$rV."</td>";
+		        $htm.="<td align='right'>".$bV."</td>";
+		        $htm.="<td align='right'>".$vV."</td>";
+		        $htm.="<td align='right'>".$pV."</td>";
+		        $htm.="<td align='right'>".$yV."</td>";
+		        $htm.="<td align='right'>".$ybV."</td>";
+		        $htm.="<td align='right'>".$yvV."</td>";
+		        $htm.="<td align='right'>".$ypV."</td>";
+		      			
+		
+			}
+			$htm.="</tr>";
+		}	
+			return $htm;	
+
+	}
 
 
     public function download(){
@@ -65,6 +238,9 @@ class Revenues_01 extends MY_Controller {
 	$this->lastRow = $this->lastRow + 1;				
 	$this->set_header(1);
 	$this->set_body(1);	
+	$this->lastRow = $this->lastRow + 1;				
+	$this->set_header(2);
+	$this->set_body(2);	
 
 	$objWriter = PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel2007');
 
@@ -76,6 +252,8 @@ class Revenues_01 extends MY_Controller {
  	public function set_header($rtype){
  		$header[0] = "REVENUE SUMMARY(in PHP 000s)";
  		$header[1] = "Acquisitions";
+ 		$header[2] = "Active Subs / Dongles estimate:";
+ 		$header[3] = "Transactional ARPU:";
   		$columns = array($header[$rtype]);
   		$level = $this->lastRow+1;	
 
@@ -104,7 +282,7 @@ class Revenues_01 extends MY_Controller {
 
 		$mdl = $this->Revenues_mdl;
 		$result = $mdl->get_runrate_nodes_all($rtype);
-		$lvl=0; 			
+		$lvl=$this->lastRow; 			
 		foreach ($result as $k => $v) {
 			$id   = $v->id;
 			$sid  = $v->sid;
@@ -190,7 +368,7 @@ public function set($ctyp,$col,$id,$lvl){
 	    $level = $this->lastRow + 1;
 	     $this->lastRow = $level;
 		$col = 0;
-	               $sA  =  $this->sheet->getCellByColumnAndRow(0, $level)->getCoordinate();
+	           $sA  =  $this->sheet->getCellByColumnAndRow(0, $level)->getCoordinate();
                $this->sheet->setCellValue($sA,"Total Revenues:");
 		$ytd = array();
 		$ybtd = array();
@@ -256,6 +434,8 @@ public function set($ctyp,$col,$id,$lvl){
     public function get_header($rtype){
     	$header[0] = "REVENUE SUMMARY(in PHP 000s)";
  		$header[1] = "Acquisitions";
+ 		$header[2] = "Active Subs / Dongles estimate:";
+ 		$header[3] = "Transactional ARPU:";
   		
   		$columns = array("");
   		$col = 0;	
@@ -551,6 +731,41 @@ public function set($ctyp,$col,$id,$lvl){
 		return $data;	
 
 	   }
+
+	   public function get_ARPU_nodes($col,$ids,$id){
+
+	   	$rf = array();	
+        $sql = "SELECT a.id,a.level FROM `runrate_nodes` a where a.id in(".implode($ids,",").") ORDER BY a.level ";
+
+       $query =  $this->db->query($sql);
+        $node = (object)array();
+            if($query->num_rows() > 0){
+                    $node = $query->result();
+
+                    foreach ($node as $key => $value) {
+					  array_push($rf, $this->sheet->getCellByColumnAndRow($col, Intval($value->level))->getCoordinate());
+				
+					}
+	
+
+
+            }
+            $sql = "SELECT a.id,a.level FROM `runrate_nodes` a where a.id=".$id."  ORDER BY a.level ";     
+
+       $query =  $this->db->query($sql);
+       $divisor = "";
+             if($query->num_rows() > 0){
+                    $row = $query->row();
+
+                $divisor.="/". $this->sheet->getCellByColumnAndRow($col, Intval($row->level))->getCoordinate();
+	
+
+
+            }
+
+            	$data = "=SUM(".implode($rf, ",").")".$divisor;	
+        return $data;    
+    	}
 
 
 
