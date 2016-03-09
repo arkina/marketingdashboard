@@ -14,10 +14,26 @@ class Revenues_02 extends MY_Controller {
 		$this->ydate=date_create(date("Y-m-d"));
         date_sub($this->ydate,date_interval_create_from_date_string("1 day"));
         $this->monthNum  = intval(date_format($this->ydate,"m"));
+
+            $dateObj   = DateTime::createFromFormat('!m', $this->monthNum);
+			$this->monthName = $dateObj->format('M');
         
     }
-
     public function index(){
+
+    	$data = $this->getSheet();
+    	$this->load->view('runrate_revenues',$data);
+
+    }
+    public function download(){
+
+    	$data = $this->getSheet();
+    	$this->excel_sheet->FILENAME = date_format($this->ydate,"Ym")."_runrate_revenues.xlsx";
+		$this->excel_sheet->PRINT_EXCEL();
+
+    }
+
+    public function getSheet(){
 
     	$this->excel_sheet->sheet->getColumnDimension('A')->setAutoSize(true);
     	
@@ -25,42 +41,144 @@ class Revenues_02 extends MY_Controller {
     	$body   = $this->SET_BODY(0);
 		$footer = $this->SET_FOOTER("Total Revenues:",0);
 		
+		$thead = "<thead>";
+		foreach ($header as $key => $head) {
+			$thead.= "<tr>";	
+			$thead.= "<th nowrap><button class='btn btn-xs btn-success'>Add New</button></th>";	
+			foreach ($head as $k => $value) {
+					$thead.= "<th nowrap>".$value->value."</th>";	
+			}
+		    $thead.= "</tr>";	
+		}
+		$thead.= "</thead>";
 
-
-		$htm="<table>";
-
+		$tbody="<tbody>";
 		foreach ($body as $key => $td) {
 			
-		$htm.="<tr data-tt-id='".$td[0]->id."' data-tt-parent-id='".$td[0]->pid."'>";
+		$tbody.="<tr data-tt-id='".$td[0]->id."' data-tt-parent-id='".$td[0]->pid."'>";
+		$tbody.= "<td nowrap><button class='btn btn-xs btn-success' onclick=\"javascript:alert(".$td[0]->id.")\">Add New</button></td>";	
 			foreach ($td as $k => $value) {
-			 $htm.="<td>". $value->cvalue."</td>";	
+			 $cv =	$this->excel_sheet->sheet->getCell($value->coordinate)->getCalculatedValue();
+			 $tbody.="<td nowrap>". $cv."</td>";	
 			}
-		$htm.="</tr>";
+		$tbody.="</tr>";
 			
 		}
-		$htm.="</table>";
+		$tbody.="</tbody>";
 
-		echo $htm;
+	    $tfoot = "<tfoot>";
+		foreach ($footer as $key => $foot) {
+			$tfoot.= "<tr>";	
+			foreach ($foot as $k => $value) {
+
+			 $cv =	$this->excel_sheet->sheet->getCell($value->coordinate)->getCalculatedValue();
+			 $tfoot.="<th nowrap>". $cv."</th>";	
+					
+			}
+		    $tfoot.= "</tr>";	
+		}
+		$tfoot.= "</tfoot>";
+
+
+		$data['rhead'] = $thead;
+		$data['rbody'] = $tbody;
+		$data['rfoot'] = $tfoot;
 
 
 		$this->excel_sheet->row+=1;
 
-    	$this->SET_HEADER("Acquisitions");
-    	$this->SET_BODY(1);
+	    $header =	$this->SET_HEADER("Acquisitions");
+	    $body   =	$this->SET_BODY(1);
+	    $thead = "<thead>";
+		foreach ($header as $key => $head) {
+			$thead.= "<tr>";	
 
+			foreach ($head as $k => $value) {
+					$thead.= "<th nowrap>".$value->value."</th>";	
+			}
+		    $thead.= "</tr>";	
+		}
+		$thead.= "</thead>";
+		$tbody="<tbody>";
+		foreach ($body as $key => $td) {
+			
+		$tbody.="<tr data-tt-id='".$td[0]->id."' data-tt-parent-id='".$td[0]->pid."'>";
+			foreach ($td as $k => $value) {
+			 $cv =	$this->excel_sheet->sheet->getCell($value->coordinate)->getCalculatedValue();
+			 $tbody.="<td nowrap>". $cv."</td>";	
+			}
+		$tbody.="</tr>";
+			
+		}
+		$tbody.="</tbody>";
+		
+
+		$data['Acqui_head'] = $thead;
+		$data['Acqui_body'] = $tbody;
+		
     	$this->excel_sheet->row+=1;
 
-    	$this->SET_HEADER("Active Subs / Dongles estimate:");
-    	$this->SET_BODY(2);
+	    $header =	$this->SET_HEADER("Active Subs / Dongles estimate:");
+	    $body   =	$this->SET_BODY(2);
+	    $thead = "<thead>";
+		foreach ($header as $key => $head) {
+			$thead.= "<tr>";	
+			foreach ($head as $k => $value) {
+					$thead.= "<th nowrap>".$value->value."</th>";	
+			}
+		    $thead.= "</tr>";	
+		}
+		$thead.= "</thead>";
+		$tbody="<tbody>";
+		foreach ($body as $key => $td) {
+			
+		$tbody.="<tr data-tt-id='".$td[0]->id."' data-tt-parent-id='".$td[0]->pid."'>";
+			foreach ($td as $k => $value) {
+			 $cv =	$this->excel_sheet->sheet->getCell($value->coordinate)->getCalculatedValue();
+			 $tbody.="<td nowrap>". $cv."</td>";	
+			}
+		$tbody.="</tr>";
+			
+		}
+		$tbody.="</tbody>";
+		
+
+		$data['Actvsubs_head'] = $thead;
+		$data['Actvsubs_body'] = $tbody;
 
 		$this->excel_sheet->row+=1;
 
-		$this->SET_HEADER("Transactional ARPU:");
-		$this->SET_ARPU();
+		$header =	$this->SET_HEADER("Transactional ARPU:");
+		$body   =	$this->SET_ARPU();
+		$thead = "<thead>";
+		foreach ($header as $key => $head) {
+			$thead.= "<tr>";	
+			foreach ($head as $k => $value) {
+					$thead.= "<th nowrap>".$value->value."</th>";	
+			}
+		    $thead.= "</tr>";	
+		}
+		$thead.= "</thead>";
+		$tbody="<tbody>";
+		foreach ($body as $key => $td) {
+			
+		$tbody.="<tr data-tt-id='".$key."' data-tt-parent-id=''>";
+			foreach ($td as $k => $value) {
+			 $cv =	$this->excel_sheet->sheet->getCell($value->coordinate)->getCalculatedValue();
+			 $tbody.="<td nowrap>". $cv."</td>";	
+			}
+		$tbody.="</tr>";
+			
+		}
+		$tbody.="</tbody>";
+		
+
+		$data['ARPU_head'] = $thead;
+		$data['ARPU_body'] = $tbody;
 
 
-    	//$this->excel_sheet->FILENAME = date_format($this->ydate,"Ym")."_runrate_revenues.xlsx";
-		//$this->excel_sheet->PRINT_EXCEL();
+		return  $data;
+    
 
     }
      public function SET_HEADER($header){
@@ -74,17 +192,20 @@ class Revenues_02 extends MY_Controller {
 		for($i=1;$i<=$this->monthNum;$i++){
     		$dateObj   = DateTime::createFromFormat('!m', $i);
 			$monthName = $dateObj->format('M');
+				$suffix = "Act";
+			if($this->monthName == $monthName){
+				$suffix = "Est";
+			}
 			
-			array_push($this->excel_sheet->values,(object)array('value'=>$monthName."Est",'indent'=>0));
+			array_push($this->excel_sheet->values,(object)array('value'=>$monthName.$suffix,'indent'=>0));
 			array_push($this->excel_sheet->values,(object)array('value'=>$monthName."Bud",'indent'=>0));
 			array_push($this->excel_sheet->values,(object)array('value'=>"MTD VAR",'indent'=>0));
 			array_push($this->excel_sheet->values,(object)array('value'=>"%",'indent'=>0));
-			array_push($this->excel_sheet->values,(object)array('value'=>$monthName." YTD Est",'indent'=>0));
+			array_push($this->excel_sheet->values,(object)array('value'=>$monthName." YTD ".$suffix,'indent'=>0));
 			array_push($this->excel_sheet->values,(object)array('value'=>$monthName." YTD Bud",'indent'=>0));
 			array_push($this->excel_sheet->values,(object)array('value'=>$monthName." YTD VAR",'indent'=>0));
 			array_push($this->excel_sheet->values,(object)array('value'=>$monthName." YTD %",'indent'=>0));
 		
-
     	}
 
 		$this->excel_sheet->SET_ROW();

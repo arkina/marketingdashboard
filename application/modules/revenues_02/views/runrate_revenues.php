@@ -58,7 +58,7 @@
               
 
                 <ol class="breadcrumb">
-                  <li><a href="./revenues_01/download">Download Revenue</a></li>
+                  <li><a href="./revenues_02/download">Download Revenue</a></li>
                   <li> <a href="./budget/download">Download Budget</a></li>
                </ol>
 
@@ -74,60 +74,50 @@
 
 <!--========================================Revenues====================================================-->
                               <table id="revenueTbl" class="table table-striped table-bordered " >
-                              <thead id="first-head" >
-                                <?php echo $header;?>
+                            
+                                <?php echo $rhead;?>
                                 
-                              </thead>
-                              <tbody id="first-body">
-                                <?php echo $body;?>
-                              </tbody>
-                                <tfoot>
-                                <?php echo $footer;?>
+                                <?php echo $rbody;?>
+                              
+                                <?php echo $rfoot;?>
                                 
-                              </tfoot>
+                        
                                </table>
 <!--========================================Acqui====================================================-->
-                              <table id="revenueTbl" class="revenueTbl table table-striped table-bordered " >
-                              <thead id="first-head" >
-                                <?php echo $acqui_header;?>
+                              <table id="AcquiTbl" class="revenueTbl table table-striped table-bordered " >
+                             
+                                <?php echo $Acqui_head;?>
                                 
-                              </thead>
-                              <tbody id="first-body">
-                                <?php echo $acqui_body;?>
-                              </tbody>
+                                <?php echo $Acqui_body;?>
+                            
                                 <tfoot>
-                                <?php //echo $footer;?>
+                                <?php //echo $Acqui_foot;?>
                                 
-                              </tfoot>
+                        
                                </table>
 <!--========================================Acqui====================================================-->
-                              <table id="revenueTbl" class="revenueTbl table table-striped table-bordered " >
-                              <thead id="first-head" >
-                                <?php echo $activesubs_header;?>
+                              <table id="ACTVSTbl" class="revenueTbl table table-striped table-bordered " >
+                              
+                                <?php echo $Actvsubs_head;?>
                                 
-                              </thead>
-                              <tbody id="first-body">
-                                <?php echo $activesubs_body;?>
-                              </tbody>
-                                <tfoot>
-                                <?php //echo $footer;?>
+                        
+                                <?php echo $Actvsubs_body;?>
+                              
+                                <?php //echo $Actvsubs_foot;?>
                                 
-                              </tfoot>
+                              
                                </table>
 
                                <!--========================================Acqui====================================================-->
-                              <table id="revenueTbl" class="revenueTbl table table-striped table-bordered " >
-                              <thead id="first-head" >
-                                <?php echo $arpu_header;?>
+                              <table id="ARPUTbl" class="revenueTbl table table-striped table-bordered " >
+                              
+                                <?php echo $ARPU_head;?>
                                 
-                              </thead>
-                              <tbody id="first-body">
-                                <?php echo $arpu_body;?>
-                              </tbody>
-                                <tfoot>
+                                <?php echo $ARPU_body;?>
+                             
                                 <?php //echo $footer;?>
                                 
-                              </tfoot>
+                              
                                </table>
 
       </div>
@@ -195,20 +185,45 @@ function Right(str, n){
 
 //$("#input-1").fileinput();
 
-var $table = $('table#revenueTbl');
+var $revenueTbl = $('table#revenueTbl');
+var $AcquiTbl = $('table#AcquiTbl');
+var $ACTVSTbl = $('table#ACTVSTbl');
+var $ARPUTbl = $('table#ARPUTbl');
 
    $("#input-700").fileinput({
         uploadUrl: "./budget/uploadxlsx", // server upload action
         uploadAsync: true,
         maxFileCount: 1
     });
-    //$("#revenueTbl").treetable({ expandable: true,"expandAll":true });
-			$table.treetable({ expandable: true, column:0 });
-     // $table.tableHeadFixer({"left" : 1,foot: true}); 
-      $table.find("tbody").on("mousedown", "tr", function() {
+  
+			$revenueTbl.treetable({ expandable: true, column:1 });
+
+      $revenueTbl.find("tbody").on("mousedown", "tr", function() {
           $(".selected").not(this).removeClass("selected");
           $(this).toggleClass("selected");
       });
+
+      $AcquiTbl.treetable({ expandable: true, column:0 });
+
+      $AcquiTbl.find("tbody").on("mousedown", "tr", function() {
+          $(".selected").not(this).removeClass("selected");
+          $(this).toggleClass("selected");
+      });
+
+   $ACTVSTbl.treetable({ expandable: true, column:0 });
+
+      $ACTVSTbl.find("tbody").on("mousedown", "tr", function() {
+          $(".selected").not(this).removeClass("selected");
+          $(this).toggleClass("selected");
+      });
+
+         $ARPUTbl.treetable({ expandable: true, column:0 });
+
+      $ARPUTbl.find("tbody").on("mousedown", "tr", function() {
+          $(".selected").not(this).removeClass("selected");
+          $(this).toggleClass("selected");
+      });
+
 
 
 

@@ -28,7 +28,7 @@ private $CI;
 	       foreach ($this->values as $k => $v) {
 				$coordinate  = $this->sheet->getCellByColumnAndRow($k, $this->row)->getCoordinate();
 				$this->sheet->setCellValue($coordinate,$v->value);
-				$this->values[$k]->cvalue=$this->sheet->getCell($coordinate)->getCalculatedValue();
+				$this->values[$k]->coordinate=$coordinate;
 				$this->sheet->getStyle($coordinate)->getAlignment()->setIndent(intval($v->indent));
 		   }		
 		  
