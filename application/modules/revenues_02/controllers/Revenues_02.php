@@ -44,7 +44,7 @@ class Revenues_02 extends MY_Controller {
 		$thead = "<thead>";
 		foreach ($header as $key => $head) {
 			$thead.= "<tr>";	
-			$thead.= "<th nowrap><button class='btn btn-xs btn-success'>Add New</button></th>";	
+			$thead.= "<th nowrap><button class='btn btn-xs btn-danger'><i class='glyphicon glyphicon-plus'></i></button></th>";	
 			foreach ($head as $k => $value) {
 					$thead.= "<th nowrap>".$value->value."</th>";	
 			}
@@ -56,7 +56,7 @@ class Revenues_02 extends MY_Controller {
 		foreach ($body as $key => $td) {
 			
 		$tbody.="<tr data-tt-id='".$td[0]->id."' data-tt-parent-id='".$td[0]->pid."'>";
-		$tbody.= "<td nowrap><button class='btn btn-xs btn-success' onclick=\"javascript:alert(".$td[0]->id.")\">Add New</button></td>";	
+		$tbody.= "<td nowrap><button class='btn btn-xs btn-success' onclick=\"javascript:$('#nid').val('".$td[0]->id."');\"    data-toggle='modal' data-target='#NewService'     ><i class='glyphicon glyphicon-plus'></i></button></td>";	
 			foreach ($td as $k => $value) {
 			 $cv =	$this->excel_sheet->sheet->getCell($value->coordinate)->getCalculatedValue();
 			 $tbody.="<td nowrap>". $cv."</td>";	

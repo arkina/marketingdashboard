@@ -126,6 +126,10 @@
   </div>
 </div>
 
+<?php
+  $this->load->view('new_service');
+
+?>
 
 
 <script data-jsfiddle="common" src="<?php echo base_url();?>assets/jquery-1.10.2.js"></script>
