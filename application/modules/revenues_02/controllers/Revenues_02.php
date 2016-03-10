@@ -69,6 +69,7 @@ class Revenues_02 extends MY_Controller {
 	    $tfoot = "<tfoot>";
 		foreach ($footer as $key => $foot) {
 			$tfoot.= "<tr>";	
+			 $tfoot.="<th nowrap></th>";	
 			foreach ($foot as $k => $value) {
 
 			 $cv =	$this->excel_sheet->sheet->getCell($value->coordinate)->getCalculatedValue();
