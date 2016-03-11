@@ -31,7 +31,7 @@ CREATE TABLE `runrate_nodes` (
   `depth` int(2) DEFAULT '0',
   `reporttype` smallint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=203 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=208 DEFAULT CHARSET=latin1;
 
 /*Data for the table `runrate_nodes` */
 
@@ -154,20 +154,25 @@ insert  into `runrate_nodes`(`id`,`sid`,`pid`,`level`,`ctype`,`sumIds`,`divisorI
 (186,37,182,'117',0,NULL,NULL,3,0),
 (187,38,182,'118',0,NULL,NULL,3,0),
 (188,39,182,'119',0,NULL,NULL,3,0),
-(189,4,0,'123',2,'190,191,192',NULL,0,1),
-(190,40,189,'124',0,NULL,NULL,3,1),
-(191,41,189,'125',0,NULL,NULL,3,1),
-(192,42,189,'126',0,NULL,NULL,3,1),
-(193,5,0,'127',0,NULL,NULL,0,1),
-(194,43,0,'128',0,NULL,NULL,0,1),
-(195,44,194,'129',2,'193,194',NULL,3,1),
-(196,45,0,'130',0,NULL,NULL,0,1),
-(197,46,0,'133',2,NULL,NULL,0,2),
-(198,47,197,'134',0,NULL,NULL,3,2),
-(199,48,197,'135',0,NULL,NULL,3,2),
-(200,49,197,'136',0,NULL,NULL,3,2),
-(201,50,0,'137',0,NULL,NULL,0,2),
-(202,45,0,'138',0,NULL,NULL,0,2);
+(189,4,0,'2',2,'190,191,192',NULL,0,1),
+(190,40,189,'3',0,NULL,NULL,3,1),
+(191,41,189,'4',0,NULL,NULL,3,1),
+(192,42,189,'5',0,NULL,NULL,3,1),
+(193,5,0,'6',0,NULL,NULL,0,1),
+(194,43,0,'7',0,NULL,NULL,0,1),
+(195,44,194,'8',2,'193,194',NULL,3,1),
+(196,45,0,'9',0,NULL,NULL,0,1),
+(197,46,0,'2',2,'198,199,200',NULL,0,2),
+(198,47,197,'3',0,NULL,NULL,3,2),
+(199,48,197,'4',0,NULL,NULL,3,2),
+(200,49,197,'5',0,NULL,NULL,3,2),
+(201,50,0,'6',0,NULL,NULL,0,2),
+(202,45,0,'7',0,NULL,NULL,0,2),
+(203,51,0,'2',3,'8,9,10,11,12,13,14,15,16,17,18,20,21,22,24',198,0,3),
+(204,52,0,'3',3,'39,40,41,42,43,44,45,46,47,48,49,51,52,53,55',199,0,3),
+(205,53,0,'4',3,'71,72,73,74,75,76,77,78,79,80,81,83,84,85,87',200,0,3),
+(206,54,0,'5',3,'133,134,135,136,137,138,139,140,141,142,143,144,145,146,147',201,0,3),
+(207,55,0,'6',3,'180',202,0,3);
 
 /*Table structure for table `runrate_revenues` */
 
@@ -359,7 +364,7 @@ CREATE TABLE `runrate_services` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=latin1;
 
 /*Data for the table `runrate_services` */
 
@@ -413,7 +418,12 @@ insert  into `runrate_services`(`id`,`name`) values
 (47,'PAYROLL Active Subs'),
 (48,'LOANS Active Subs'),
 (49,'ALLOWANCE Active Subs'),
-(50,'REGULAR Active Subs');
+(50,'REGULAR Active Subs'),
+(51,'PAYROLL ARPU'),
+(52,'LOANS ARPU'),
+(53,'ALLOWANCE ARPU'),
+(54,'REGULAR ARPU'),
+(55,'GLOBE CHARGE ARPU');
 
 /*Table structure for table `acqui_view` */
 
@@ -423,6 +433,90 @@ DROP TABLE IF EXISTS `acqui_view`;
 /*!50001 DROP TABLE IF EXISTS `acqui_view` */;
 
 /*!50001 CREATE TABLE  `acqui_view`(
+ `level` decimal(10,0) ,
+ `depth` int(2) ,
+ `ctype` smallint(6) ,
+ `id` int(10) ,
+ `pid` int(10) ,
+ `name` varchar(255) ,
+ `sumIds` text ,
+ `divisorId` int(10) ,
+ `janRev` varchar(255) ,
+ `febRev` varchar(255) ,
+ `marRev` varchar(255) ,
+ `aprRev` varchar(255) ,
+ `mayRev` varchar(255) ,
+ `junRev` varchar(255) ,
+ `julRev` varchar(255) ,
+ `augRev` varchar(255) ,
+ `sepRev` varchar(255) ,
+ `octRev` varchar(225) ,
+ `novRev` varchar(255) ,
+ `decRev` varchar(255) ,
+ `janBud` varchar(255) ,
+ `febBud` varchar(255) ,
+ `marBud` varchar(255) ,
+ `aprBud` varchar(255) ,
+ `mayBud` varchar(255) ,
+ `junBud` varchar(255) ,
+ `julBud` varchar(255) ,
+ `augBud` varchar(255) ,
+ `sepBud` varchar(255) ,
+ `octBud` varchar(255) ,
+ `novBud` varchar(255) ,
+ `decBud` varchar(255) 
+)*/;
+
+/*Table structure for table `activesubs_view` */
+
+DROP TABLE IF EXISTS `activesubs_view`;
+
+/*!50001 DROP VIEW IF EXISTS `activesubs_view` */;
+/*!50001 DROP TABLE IF EXISTS `activesubs_view` */;
+
+/*!50001 CREATE TABLE  `activesubs_view`(
+ `level` decimal(10,0) ,
+ `depth` int(2) ,
+ `ctype` smallint(6) ,
+ `id` int(10) ,
+ `pid` int(10) ,
+ `name` varchar(255) ,
+ `sumIds` text ,
+ `divisorId` int(10) ,
+ `janRev` varchar(255) ,
+ `febRev` varchar(255) ,
+ `marRev` varchar(255) ,
+ `aprRev` varchar(255) ,
+ `mayRev` varchar(255) ,
+ `junRev` varchar(255) ,
+ `julRev` varchar(255) ,
+ `augRev` varchar(255) ,
+ `sepRev` varchar(255) ,
+ `octRev` varchar(225) ,
+ `novRev` varchar(255) ,
+ `decRev` varchar(255) ,
+ `janBud` varchar(255) ,
+ `febBud` varchar(255) ,
+ `marBud` varchar(255) ,
+ `aprBud` varchar(255) ,
+ `mayBud` varchar(255) ,
+ `junBud` varchar(255) ,
+ `julBud` varchar(255) ,
+ `augBud` varchar(255) ,
+ `sepBud` varchar(255) ,
+ `octBud` varchar(255) ,
+ `novBud` varchar(255) ,
+ `decBud` varchar(255) 
+)*/;
+
+/*Table structure for table `arpu_view` */
+
+DROP TABLE IF EXISTS `arpu_view`;
+
+/*!50001 DROP VIEW IF EXISTS `arpu_view` */;
+/*!50001 DROP TABLE IF EXISTS `arpu_view` */;
+
+/*!50001 CREATE TABLE  `arpu_view`(
  `level` decimal(10,0) ,
  `depth` int(2) ,
  `ctype` smallint(6) ,
@@ -505,6 +599,20 @@ DROP TABLE IF EXISTS `runrate_view`;
 /*!50001 DROP VIEW IF EXISTS `acqui_view` */;
 
 /*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `acqui_view` AS (select `a`.`level` AS `level`,`a`.`depth` AS `depth`,`a`.`ctype` AS `ctype`,`a`.`id` AS `id`,`a`.`pid` AS `pid`,`b`.`name` AS `name`,`a`.`sumIds` AS `sumIds`,`a`.`divisorId` AS `divisorId`,`c`.`janRev` AS `janRev`,`c`.`febRev` AS `febRev`,`c`.`marRev` AS `marRev`,`c`.`aprRev` AS `aprRev`,`c`.`mayRev` AS `mayRev`,`c`.`junRev` AS `junRev`,`c`.`julRev` AS `julRev`,`c`.`augRev` AS `augRev`,`c`.`sepRev` AS `sepRev`,`c`.`octRev` AS `octRev`,`c`.`novRev` AS `novRev`,`c`.`decRev` AS `decRev`,`c`.`janBud` AS `janBud`,`c`.`febBud` AS `febBud`,`c`.`marBud` AS `marBud`,`c`.`aprBud` AS `aprBud`,`c`.`mayBud` AS `mayBud`,`c`.`junBud` AS `junBud`,`c`.`julBud` AS `julBud`,`c`.`augBud` AS `augBud`,`c`.`sepBud` AS `sepBud`,`c`.`octBud` AS `octBud`,`c`.`novBud` AS `novBud`,`c`.`decBud` AS `decBud` from ((`runrate_nodes` `a` join `runrate_services` `b` on((`a`.`sid` = `b`.`id`))) left join `runrate_revenues` `c` on((`a`.`id` = `c`.`nid`))) where (`a`.`reporttype` = 1) order by `a`.`level`) */;
+
+/*View structure for view activesubs_view */
+
+/*!50001 DROP TABLE IF EXISTS `activesubs_view` */;
+/*!50001 DROP VIEW IF EXISTS `activesubs_view` */;
+
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `activesubs_view` AS (select `a`.`level` AS `level`,`a`.`depth` AS `depth`,`a`.`ctype` AS `ctype`,`a`.`id` AS `id`,`a`.`pid` AS `pid`,`b`.`name` AS `name`,`a`.`sumIds` AS `sumIds`,`a`.`divisorId` AS `divisorId`,`c`.`janRev` AS `janRev`,`c`.`febRev` AS `febRev`,`c`.`marRev` AS `marRev`,`c`.`aprRev` AS `aprRev`,`c`.`mayRev` AS `mayRev`,`c`.`junRev` AS `junRev`,`c`.`julRev` AS `julRev`,`c`.`augRev` AS `augRev`,`c`.`sepRev` AS `sepRev`,`c`.`octRev` AS `octRev`,`c`.`novRev` AS `novRev`,`c`.`decRev` AS `decRev`,`c`.`janBud` AS `janBud`,`c`.`febBud` AS `febBud`,`c`.`marBud` AS `marBud`,`c`.`aprBud` AS `aprBud`,`c`.`mayBud` AS `mayBud`,`c`.`junBud` AS `junBud`,`c`.`julBud` AS `julBud`,`c`.`augBud` AS `augBud`,`c`.`sepBud` AS `sepBud`,`c`.`octBud` AS `octBud`,`c`.`novBud` AS `novBud`,`c`.`decBud` AS `decBud` from ((`runrate_nodes` `a` join `runrate_services` `b` on((`a`.`sid` = `b`.`id`))) left join `runrate_revenues` `c` on((`a`.`id` = `c`.`nid`))) where (`a`.`reporttype` = 2) order by `a`.`level`) */;
+
+/*View structure for view arpu_view */
+
+/*!50001 DROP TABLE IF EXISTS `arpu_view` */;
+/*!50001 DROP VIEW IF EXISTS `arpu_view` */;
+
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `arpu_view` AS (select `a`.`level` AS `level`,`a`.`depth` AS `depth`,`a`.`ctype` AS `ctype`,`a`.`id` AS `id`,`a`.`pid` AS `pid`,`b`.`name` AS `name`,`a`.`sumIds` AS `sumIds`,`a`.`divisorId` AS `divisorId`,`c`.`janRev` AS `janRev`,`c`.`febRev` AS `febRev`,`c`.`marRev` AS `marRev`,`c`.`aprRev` AS `aprRev`,`c`.`mayRev` AS `mayRev`,`c`.`junRev` AS `junRev`,`c`.`julRev` AS `julRev`,`c`.`augRev` AS `augRev`,`c`.`sepRev` AS `sepRev`,`c`.`octRev` AS `octRev`,`c`.`novRev` AS `novRev`,`c`.`decRev` AS `decRev`,`c`.`janBud` AS `janBud`,`c`.`febBud` AS `febBud`,`c`.`marBud` AS `marBud`,`c`.`aprBud` AS `aprBud`,`c`.`mayBud` AS `mayBud`,`c`.`junBud` AS `junBud`,`c`.`julBud` AS `julBud`,`c`.`augBud` AS `augBud`,`c`.`sepBud` AS `sepBud`,`c`.`octBud` AS `octBud`,`c`.`novBud` AS `novBud`,`c`.`decBud` AS `decBud` from ((`runrate_nodes` `a` join `runrate_services` `b` on((`a`.`sid` = `b`.`id`))) left join `runrate_revenues` `c` on((`a`.`id` = `c`.`nid`))) where (`a`.`reporttype` = 3) order by `a`.`level`) */;
 
 /*View structure for view runrate_view */
 
