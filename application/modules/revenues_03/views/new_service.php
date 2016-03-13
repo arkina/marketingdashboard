@@ -24,27 +24,69 @@
                        <span class="sr-only">Close</span>
                 </button>
                 <h4 class="modal-title" id="myModalLabel">
-                    New Service
+                    
                 </h4>
             </div>
             
             <!-- Modal Body -->
             <div class="modal-body">
                 
-                <form class="form-horizontal" role="form">
-                <input type="hidden" id="nid">
-                  <div class="form-group">
-                    <label  class="col-sm-2 control-label"
-                              for="name">Service Name</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" 
-                        id="name" placeholder=""/>
+                <form class="form-horizontal">
+<fieldset>
 
-                    </div>
-                  </div>
-                 
-                
-                </form>
+<!-- Form Name -->
+
+
+
+<!-- Prepended text-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="sumIds">Sum ID</label>
+  <div class="col-md-6">
+    <div class="input-group">
+      <span class="input-group-addon">SUM(,)</span>
+      <input id="sumIds" name="sumIds" class="form-control" placeholder="" type="text">
+    </div>
+    
+  </div>
+</div>
+
+<!-- Prepended text-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="divisorId">Divisor Id</label>
+  <div class="col-md-4">
+    <div class="input-group">
+      <span class="input-group-addon">/</span>
+      <input id="divisorId" name="divisorId" class="form-control" placeholder="" type="text">
+    </div>
+    
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="ctype">Formula Type</label>
+  <div class="col-md-4">
+    <select id="ctype" name="ctype" class="form-control">
+      <option value="0">Default Value</option>
+      <option value="1">SUM(,)</option>
+      <option value="2">SUM(:)</option>
+      <option value="3">SUM(,) / </option>
+    </select>
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="depth">Depth</label>  
+  <div class="col-md-2">
+  <input id="depth" name="depth" type="number" placeholder="" class="form-control input-md">
+    
+  </div>
+</div>
+
+</fieldset>
+</form>
+
                 
                 
                 

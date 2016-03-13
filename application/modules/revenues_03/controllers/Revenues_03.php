@@ -84,6 +84,7 @@ class Revenues_03 extends MY_Controller {
 		foreach ($header as $key => $head) {
 			$thead.= "<tr>";	
 			$thead.= "<th nowrap><button class='btn btn-xs btn-danger'><i class='glyphicon glyphicon-plus'></i></button></th>";	
+			$thead.= "<th nowrap>ID</th>";	
 			foreach ($head as $k => $value) {
 					$thead.= "<th nowrap>".$value->value."</th>";	
 			}
@@ -99,7 +100,9 @@ class Revenues_03 extends MY_Controller {
 		foreach ($body as $key => $td) {
 			
 		$tbody.="<tr data-tt-id='".$td[0]->id."' data-tt-parent-id='".$td[0]->pid."'>";
-		$tbody.= "<td nowrap><button class='btn btn-xs btn-success' onclick=\"javascript:$('#nid').val('".$td[0]->id."');\"    data-toggle='modal' data-target='#NewService'     ><i class='glyphicon glyphicon-plus'></i></button></td>";	
+		$tbody.= "<td nowrap><button class='btn btn-xs btn-success' 
+		onclick=\"javascript:setting('".$td[0]->value."','".$td[0]->id."','".$td[0]->sumIds."','".$td[0]->divisorId."','".$td[0]->ctype."','".$td[0]->indent."');\"    data-toggle='modal' data-target='#NewService'     ><i class='glyphicon glyphicon-cog'></i></button></td>";	
+		$tbody.= "<td nowrap>".$td[0]->id."</td>";	
 			foreach ($td as $k => $value) {
 			 $cv =	$this->spreadsheet->sheet->getCell($value->coordinate)->getCalculatedValue();
 			 $tbody.="<td nowrap>". $cv."</td>";	
@@ -115,6 +118,7 @@ class Revenues_03 extends MY_Controller {
     	$tfoot = "<tfoot>";
 		foreach ($footer as $key => $foot) {
 			$tfoot.= "<tr>";	
+			 $tfoot.="<th nowrap></th>";	
 			 $tfoot.="<th nowrap></th>";	
 			foreach ($foot as $k => $value) {
 
@@ -171,7 +175,11 @@ class Revenues_03 extends MY_Controller {
     			foreach ($result as $key => $value) {
     				
     				$this->spreadsheet->row    = $value['level'];
-    				$this->spreadsheet->values = array((object)array('value'=>$value['name'],'indent'=>$value['depth'], 'pid'=>$value['pid'],'id'=>$value['id']));
+    				$this->spreadsheet->values = array(
+    					(object)array('value'=>$value['name'],'indent'=>$value['depth'], 'pid'=>$value['pid'],'id'=>$value['id'],
+    						'sumIds'=>$value['sumIds'],'divisorId'=>$value['divisorId'],'ctype'=>$value['ctype'])
+    						
+    					);
     				$sumids = $value['sumIds'];
     				$divisorId =  $value['divisorId'];
     				$ctype = $value['ctype'];
@@ -191,10 +199,8 @@ class Revenues_03 extends MY_Controller {
 
 							if($ctype<>0){
 
-								$rV = $this->CTYPE_FORMULA($ctype,$col,$sumids);
-								if($ctype == 3){
-								 $rV = $this->ARPU_FORMULA($col,$sumids,$divisorId);
-								}
+								$rV = $this->CTYPE_FORMULA($ctype,$col,$sumids,$divisorId);
+								
 							}
 	    					
 	    					array_push($this->spreadsheet->values,(object)array('value'=>$rV));
@@ -206,10 +212,8 @@ class Revenues_03 extends MY_Controller {
 							array_push($ybtd,$bA);
 							$bV  = $value[$monthName.$suffix];
 							if($ctype<>0){
-								$bV = $this->CTYPE_FORMULA($ctype,$col,$sumids);
-								if($ctype == 3){
-								 $bV = $this->ARPU_FORMULA($col,$sumids,$divisorId);
-								}
+								$bV = $this->CTYPE_FORMULA($ctype,$col,$sumids,$divisorId);
+								
 							}
 
 	    					array_push($this->spreadsheet->values,(object)array('value'=>$bV));
@@ -366,7 +370,7 @@ class Revenues_03 extends MY_Controller {
     }
 
 
-      public function CTYPE_FORMULA($ctyp,$col,$sumids){
+      public function CTYPE_FORMULA($ctyp,$col,$sumids,$divisorId){
 
 		$sql = "SELECT * FROM(SELECT level as 'row'  FROM runrate_nodes WHERE id in(".$sumids.") )
 				a WHERE ISNULL(`row`)!=1  "; 
@@ -416,6 +420,9 @@ class Revenues_03 extends MY_Controller {
 						
 						case 2:
 						return	$data2;
+						break;
+						case 3:
+						return	 $this->ARPU_FORMULA($col,$sumids,$divisorId);
 						break;
 			
 						     

@@ -200,28 +200,28 @@ var $ARPUTbl = $('table#ARPUTbl');
         maxFileCount: 1
     });
   
-			$revenueTbl.treetable({ expandable: true, column:1 });
+			$revenueTbl.treetable({ expandable: true, column:2 });
 
       $revenueTbl.find("tbody").on("mousedown", "tr", function() {
           $(".selected").not(this).removeClass("selected");
           $(this).toggleClass("selected");
       });
 
-      $AcquiTbl.treetable({ expandable: true, column:1 });
+      $AcquiTbl.treetable({ expandable: true, column:2 });
 
       $AcquiTbl.find("tbody").on("mousedown", "tr", function() {
           $(".selected").not(this).removeClass("selected");
           $(this).toggleClass("selected");
       });
 
-   $ACTVSTbl.treetable({ expandable: true, column:1 });
+   $ACTVSTbl.treetable({ expandable: true, column:2 });
 
       $ACTVSTbl.find("tbody").on("mousedown", "tr", function() {
           $(".selected").not(this).removeClass("selected");
           $(this).toggleClass("selected");
       });
 
-         $ARPUTbl.treetable({ expandable: true, column:1 });
+         $ARPUTbl.treetable({ expandable: true, column:2 });
 
       $ARPUTbl.find("tbody").on("mousedown", "tr", function() {
           $(".selected").not(this).removeClass("selected");
@@ -230,6 +230,15 @@ var $ARPUTbl = $('table#ARPUTbl');
 
 
 
+
+function setting(sname,id,sids,did,ctype,indent){
+  $(".modal-title").html(sname);
+  $("input#sumIds").val(sids);  
+  $("input#divisorId").val(did);  
+  $('select#ctype option[value='+ctype+']').attr('selected','selected');
+  $("input#depth").val(indent);  
+
+}
 
 //$table.floatThead();
 
