@@ -101,7 +101,7 @@ class Revenues_03 extends MY_Controller {
 			
 		$tbody.="<tr data-tt-id='".$td[0]->id."' data-tt-parent-id='".$td[0]->pid."'>";
 		$tbody.= "<td nowrap><button class='btn btn-xs btn-success' 
-		onclick=\"javascript:setting('".$td[0]->value."','".$td[0]->id."','".$td[0]->sumIds."','".$td[0]->divisorId."','".$td[0]->ctype."','".$td[0]->indent."');\"    data-toggle='modal' data-target='#NewService'     ><i class='glyphicon glyphicon-cog'></i></button></td>";	
+		onclick=\"javascript:setting('".$td[0]->value."','".$td[0]->id."','".$td[0]->sumIds."','".$td[0]->divisorId."','".$td[0]->ctype."','".$td[0]->indent."','".$td[0]->reporttype."');\"    data-toggle='modal' data-target='#Setting'     ><i class='glyphicon glyphicon-cog'></i></button></td>";	
 		$tbody.= "<td nowrap>".$td[0]->id."</td>";	
 			foreach ($td as $k => $value) {
 			 $cv =	$this->spreadsheet->sheet->getCell($value->coordinate)->getCalculatedValue();
@@ -177,7 +177,7 @@ class Revenues_03 extends MY_Controller {
     				$this->spreadsheet->row    = $value['level'];
     				$this->spreadsheet->values = array(
     					(object)array('value'=>$value['name'],'indent'=>$value['depth'], 'pid'=>$value['pid'],'id'=>$value['id'],
-    						'sumIds'=>$value['sumIds'],'divisorId'=>$value['divisorId'],'ctype'=>$value['ctype'])
+    						'sumIds'=>$value['sumIds'],'divisorId'=>$value['divisorId'],'ctype'=>$value['ctype'],'reporttype'=>$value['reporttype'])
     						
     					);
     				$sumids = $value['sumIds'];
@@ -480,6 +480,41 @@ class Revenues_03 extends MY_Controller {
 
 		return $data;	
 
+	}
+	public function save_setting(){
+		$id = $this->input->post('id');
+		$reporttype = $this->input->post('reporttype');
+
+		switch ($reporttype) {
+			case 0:
+				$table = "runrate_view";
+				break;
+			case 1:
+				$table = "acqui_view";
+				break;
+			case 2:
+				$table = "activesubs_view";
+				break;
+			case 3:
+				$table = "arpu_view";
+				break;			
+			
+		}
+		$this->db->db_debug = TRUE;
+		$this->db->where('id', $id);
+		if(!$this->db->update($table,$this->input->post())){
+
+			$response['message'] = "<i style='color:red'>Failed to save changes</i>";
+			$response['code'] = 0;
+		}else{
+			$response['message'] = "<i style='color:green'>Successfully save</i>";
+			$response['code'] = 1;
+
+		}
+
+
+		echo json_encode($response);
+		exit;	
 	}
    	
 }

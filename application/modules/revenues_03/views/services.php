@@ -12,7 +12,7 @@
     margin-left: 15px;
 }
 </style>
-<div class="modal fade" id="NewService" tabindex="-1" role="dialog" 
+<div class="modal fade" id="Setting" tabindex="-1" role="dialog" 
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -26,18 +26,20 @@
                 <h4 class="modal-title" id="myModalLabel">
                     
                 </h4>
+                <span id='response'></span>
             </div>
             
             <!-- Modal Body -->
             <div class="modal-body">
                 
-                <form class="form-horizontal">
+                <form class="form-horizontal" id="form_setting" action="<?php echo base_url();?>revenues_03/save_setting" method="POST">
 <fieldset>
 
 <!-- Form Name -->
 
 
-
+<input type="hidden" name='id' id='id'>
+<input type="hidden" name='reporttype' id='reporttype'>
 <!-- Prepended text-->
 <div class="form-group">
   <label class="col-md-4 control-label" for="sumIds">Sum ID</label>
@@ -67,10 +69,7 @@
   <label class="col-md-4 control-label" for="ctype">Formula Type</label>
   <div class="col-md-4">
     <select id="ctype" name="ctype" class="form-control">
-      <option value="0">Default Value</option>
-      <option value="1">SUM(,)</option>
-      <option value="2">SUM(:)</option>
-      <option value="3">SUM(,) / </option>
+      
     </select>
   </div>
 </div>
@@ -101,7 +100,7 @@
                         data-dismiss="modal">
                             Close
                 </button>
-                <button type="button" class="btn btn-primary">
+                <button type="button" class="btn btn-primary" id="btn-save">
                     Save
                 </button>
             </div>

@@ -436,6 +436,7 @@ DROP TABLE IF EXISTS `acqui_view`;
  `level` decimal(10,0) ,
  `depth` int(2) ,
  `ctype` smallint(6) ,
+ `reporttype` smallint(1) ,
  `id` int(10) ,
  `pid` int(10) ,
  `name` varchar(255) ,
@@ -478,6 +479,7 @@ DROP TABLE IF EXISTS `activesubs_view`;
  `level` decimal(10,0) ,
  `depth` int(2) ,
  `ctype` smallint(6) ,
+ `reporttype` smallint(1) ,
  `id` int(10) ,
  `pid` int(10) ,
  `name` varchar(255) ,
@@ -520,6 +522,7 @@ DROP TABLE IF EXISTS `arpu_view`;
  `level` decimal(10,0) ,
  `depth` int(2) ,
  `ctype` smallint(6) ,
+ `reporttype` smallint(1) ,
  `id` int(10) ,
  `pid` int(10) ,
  `name` varchar(255) ,
@@ -562,6 +565,7 @@ DROP TABLE IF EXISTS `runrate_view`;
  `level` decimal(10,0) ,
  `depth` int(2) ,
  `ctype` smallint(6) ,
+ `reporttype` smallint(1) ,
  `id` int(10) ,
  `pid` int(10) ,
  `name` varchar(255) ,
@@ -598,28 +602,28 @@ DROP TABLE IF EXISTS `runrate_view`;
 /*!50001 DROP TABLE IF EXISTS `acqui_view` */;
 /*!50001 DROP VIEW IF EXISTS `acqui_view` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `acqui_view` AS (select `a`.`level` AS `level`,`a`.`depth` AS `depth`,`a`.`ctype` AS `ctype`,`a`.`id` AS `id`,`a`.`pid` AS `pid`,`b`.`name` AS `name`,`a`.`sumIds` AS `sumIds`,`a`.`divisorId` AS `divisorId`,`c`.`janRev` AS `janRev`,`c`.`febRev` AS `febRev`,`c`.`marRev` AS `marRev`,`c`.`aprRev` AS `aprRev`,`c`.`mayRev` AS `mayRev`,`c`.`junRev` AS `junRev`,`c`.`julRev` AS `julRev`,`c`.`augRev` AS `augRev`,`c`.`sepRev` AS `sepRev`,`c`.`octRev` AS `octRev`,`c`.`novRev` AS `novRev`,`c`.`decRev` AS `decRev`,`c`.`janBud` AS `janBud`,`c`.`febBud` AS `febBud`,`c`.`marBud` AS `marBud`,`c`.`aprBud` AS `aprBud`,`c`.`mayBud` AS `mayBud`,`c`.`junBud` AS `junBud`,`c`.`julBud` AS `julBud`,`c`.`augBud` AS `augBud`,`c`.`sepBud` AS `sepBud`,`c`.`octBud` AS `octBud`,`c`.`novBud` AS `novBud`,`c`.`decBud` AS `decBud` from ((`runrate_nodes` `a` join `runrate_services` `b` on((`a`.`sid` = `b`.`id`))) left join `runrate_revenues` `c` on((`a`.`id` = `c`.`nid`))) where (`a`.`reporttype` = 1) order by `a`.`level`) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `acqui_view` AS (select `a`.`level` AS `level`,`a`.`depth` AS `depth`,`a`.`ctype` AS `ctype`,`a`.`reporttype` AS `reporttype`,`a`.`id` AS `id`,`a`.`pid` AS `pid`,`b`.`name` AS `name`,`a`.`sumIds` AS `sumIds`,`a`.`divisorId` AS `divisorId`,`c`.`janRev` AS `janRev`,`c`.`febRev` AS `febRev`,`c`.`marRev` AS `marRev`,`c`.`aprRev` AS `aprRev`,`c`.`mayRev` AS `mayRev`,`c`.`junRev` AS `junRev`,`c`.`julRev` AS `julRev`,`c`.`augRev` AS `augRev`,`c`.`sepRev` AS `sepRev`,`c`.`octRev` AS `octRev`,`c`.`novRev` AS `novRev`,`c`.`decRev` AS `decRev`,`c`.`janBud` AS `janBud`,`c`.`febBud` AS `febBud`,`c`.`marBud` AS `marBud`,`c`.`aprBud` AS `aprBud`,`c`.`mayBud` AS `mayBud`,`c`.`junBud` AS `junBud`,`c`.`julBud` AS `julBud`,`c`.`augBud` AS `augBud`,`c`.`sepBud` AS `sepBud`,`c`.`octBud` AS `octBud`,`c`.`novBud` AS `novBud`,`c`.`decBud` AS `decBud` from ((`runrate_nodes` `a` join `runrate_services` `b` on((`a`.`sid` = `b`.`id`))) left join `runrate_revenues` `c` on((`a`.`id` = `c`.`nid`))) where (`a`.`reporttype` = 1) order by `a`.`level`) */;
 
 /*View structure for view activesubs_view */
 
 /*!50001 DROP TABLE IF EXISTS `activesubs_view` */;
 /*!50001 DROP VIEW IF EXISTS `activesubs_view` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `activesubs_view` AS (select `a`.`level` AS `level`,`a`.`depth` AS `depth`,`a`.`ctype` AS `ctype`,`a`.`id` AS `id`,`a`.`pid` AS `pid`,`b`.`name` AS `name`,`a`.`sumIds` AS `sumIds`,`a`.`divisorId` AS `divisorId`,`c`.`janRev` AS `janRev`,`c`.`febRev` AS `febRev`,`c`.`marRev` AS `marRev`,`c`.`aprRev` AS `aprRev`,`c`.`mayRev` AS `mayRev`,`c`.`junRev` AS `junRev`,`c`.`julRev` AS `julRev`,`c`.`augRev` AS `augRev`,`c`.`sepRev` AS `sepRev`,`c`.`octRev` AS `octRev`,`c`.`novRev` AS `novRev`,`c`.`decRev` AS `decRev`,`c`.`janBud` AS `janBud`,`c`.`febBud` AS `febBud`,`c`.`marBud` AS `marBud`,`c`.`aprBud` AS `aprBud`,`c`.`mayBud` AS `mayBud`,`c`.`junBud` AS `junBud`,`c`.`julBud` AS `julBud`,`c`.`augBud` AS `augBud`,`c`.`sepBud` AS `sepBud`,`c`.`octBud` AS `octBud`,`c`.`novBud` AS `novBud`,`c`.`decBud` AS `decBud` from ((`runrate_nodes` `a` join `runrate_services` `b` on((`a`.`sid` = `b`.`id`))) left join `runrate_revenues` `c` on((`a`.`id` = `c`.`nid`))) where (`a`.`reporttype` = 2) order by `a`.`level`) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `activesubs_view` AS (select `a`.`level` AS `level`,`a`.`depth` AS `depth`,`a`.`ctype` AS `ctype`,`a`.`reporttype` AS `reporttype`,`a`.`id` AS `id`,`a`.`pid` AS `pid`,`b`.`name` AS `name`,`a`.`sumIds` AS `sumIds`,`a`.`divisorId` AS `divisorId`,`c`.`janRev` AS `janRev`,`c`.`febRev` AS `febRev`,`c`.`marRev` AS `marRev`,`c`.`aprRev` AS `aprRev`,`c`.`mayRev` AS `mayRev`,`c`.`junRev` AS `junRev`,`c`.`julRev` AS `julRev`,`c`.`augRev` AS `augRev`,`c`.`sepRev` AS `sepRev`,`c`.`octRev` AS `octRev`,`c`.`novRev` AS `novRev`,`c`.`decRev` AS `decRev`,`c`.`janBud` AS `janBud`,`c`.`febBud` AS `febBud`,`c`.`marBud` AS `marBud`,`c`.`aprBud` AS `aprBud`,`c`.`mayBud` AS `mayBud`,`c`.`junBud` AS `junBud`,`c`.`julBud` AS `julBud`,`c`.`augBud` AS `augBud`,`c`.`sepBud` AS `sepBud`,`c`.`octBud` AS `octBud`,`c`.`novBud` AS `novBud`,`c`.`decBud` AS `decBud` from ((`runrate_nodes` `a` join `runrate_services` `b` on((`a`.`sid` = `b`.`id`))) left join `runrate_revenues` `c` on((`a`.`id` = `c`.`nid`))) where (`a`.`reporttype` = 2) order by `a`.`level`) */;
 
 /*View structure for view arpu_view */
 
 /*!50001 DROP TABLE IF EXISTS `arpu_view` */;
 /*!50001 DROP VIEW IF EXISTS `arpu_view` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `arpu_view` AS (select `a`.`level` AS `level`,`a`.`depth` AS `depth`,`a`.`ctype` AS `ctype`,`a`.`id` AS `id`,`a`.`pid` AS `pid`,`b`.`name` AS `name`,`a`.`sumIds` AS `sumIds`,`a`.`divisorId` AS `divisorId`,`c`.`janRev` AS `janRev`,`c`.`febRev` AS `febRev`,`c`.`marRev` AS `marRev`,`c`.`aprRev` AS `aprRev`,`c`.`mayRev` AS `mayRev`,`c`.`junRev` AS `junRev`,`c`.`julRev` AS `julRev`,`c`.`augRev` AS `augRev`,`c`.`sepRev` AS `sepRev`,`c`.`octRev` AS `octRev`,`c`.`novRev` AS `novRev`,`c`.`decRev` AS `decRev`,`c`.`janBud` AS `janBud`,`c`.`febBud` AS `febBud`,`c`.`marBud` AS `marBud`,`c`.`aprBud` AS `aprBud`,`c`.`mayBud` AS `mayBud`,`c`.`junBud` AS `junBud`,`c`.`julBud` AS `julBud`,`c`.`augBud` AS `augBud`,`c`.`sepBud` AS `sepBud`,`c`.`octBud` AS `octBud`,`c`.`novBud` AS `novBud`,`c`.`decBud` AS `decBud` from ((`runrate_nodes` `a` join `runrate_services` `b` on((`a`.`sid` = `b`.`id`))) left join `runrate_revenues` `c` on((`a`.`id` = `c`.`nid`))) where (`a`.`reporttype` = 3) order by `a`.`level`) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `arpu_view` AS (select `a`.`level` AS `level`,`a`.`depth` AS `depth`,`a`.`ctype` AS `ctype`,`a`.`reporttype` AS `reporttype`,`a`.`id` AS `id`,`a`.`pid` AS `pid`,`b`.`name` AS `name`,`a`.`sumIds` AS `sumIds`,`a`.`divisorId` AS `divisorId`,`c`.`janRev` AS `janRev`,`c`.`febRev` AS `febRev`,`c`.`marRev` AS `marRev`,`c`.`aprRev` AS `aprRev`,`c`.`mayRev` AS `mayRev`,`c`.`junRev` AS `junRev`,`c`.`julRev` AS `julRev`,`c`.`augRev` AS `augRev`,`c`.`sepRev` AS `sepRev`,`c`.`octRev` AS `octRev`,`c`.`novRev` AS `novRev`,`c`.`decRev` AS `decRev`,`c`.`janBud` AS `janBud`,`c`.`febBud` AS `febBud`,`c`.`marBud` AS `marBud`,`c`.`aprBud` AS `aprBud`,`c`.`mayBud` AS `mayBud`,`c`.`junBud` AS `junBud`,`c`.`julBud` AS `julBud`,`c`.`augBud` AS `augBud`,`c`.`sepBud` AS `sepBud`,`c`.`octBud` AS `octBud`,`c`.`novBud` AS `novBud`,`c`.`decBud` AS `decBud` from ((`runrate_nodes` `a` join `runrate_services` `b` on((`a`.`sid` = `b`.`id`))) left join `runrate_revenues` `c` on((`a`.`id` = `c`.`nid`))) where (`a`.`reporttype` = 3) order by `a`.`level`) */;
 
 /*View structure for view runrate_view */
 
 /*!50001 DROP TABLE IF EXISTS `runrate_view` */;
 /*!50001 DROP VIEW IF EXISTS `runrate_view` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `runrate_view` AS (select `a`.`level` AS `level`,`a`.`depth` AS `depth`,`a`.`ctype` AS `ctype`,`a`.`id` AS `id`,`a`.`pid` AS `pid`,`b`.`name` AS `name`,`a`.`sumIds` AS `sumIds`,`a`.`divisorId` AS `divisorId`,`c`.`janRev` AS `janRev`,`c`.`febRev` AS `febRev`,`c`.`marRev` AS `marRev`,`c`.`aprRev` AS `aprRev`,`c`.`mayRev` AS `mayRev`,`c`.`junRev` AS `junRev`,`c`.`julRev` AS `julRev`,`c`.`augRev` AS `augRev`,`c`.`sepRev` AS `sepRev`,`c`.`octRev` AS `octRev`,`c`.`novRev` AS `novRev`,`c`.`decRev` AS `decRev`,`c`.`janBud` AS `janBud`,`c`.`febBud` AS `febBud`,`c`.`marBud` AS `marBud`,`c`.`aprBud` AS `aprBud`,`c`.`mayBud` AS `mayBud`,`c`.`junBud` AS `junBud`,`c`.`julBud` AS `julBud`,`c`.`augBud` AS `augBud`,`c`.`sepBud` AS `sepBud`,`c`.`octBud` AS `octBud`,`c`.`novBud` AS `novBud`,`c`.`decBud` AS `decBud` from ((`runrate_nodes` `a` join `runrate_services` `b` on((`a`.`sid` = `b`.`id`))) left join `runrate_revenues` `c` on((`a`.`id` = `c`.`nid`))) where (`a`.`reporttype` = 0) order by `a`.`level`) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `runrate_view` AS (select `a`.`level` AS `level`,`a`.`depth` AS `depth`,`a`.`ctype` AS `ctype`,`a`.`reporttype` AS `reporttype`,`a`.`id` AS `id`,`a`.`pid` AS `pid`,`b`.`name` AS `name`,`a`.`sumIds` AS `sumIds`,`a`.`divisorId` AS `divisorId`,`c`.`janRev` AS `janRev`,`c`.`febRev` AS `febRev`,`c`.`marRev` AS `marRev`,`c`.`aprRev` AS `aprRev`,`c`.`mayRev` AS `mayRev`,`c`.`junRev` AS `junRev`,`c`.`julRev` AS `julRev`,`c`.`augRev` AS `augRev`,`c`.`sepRev` AS `sepRev`,`c`.`octRev` AS `octRev`,`c`.`novRev` AS `novRev`,`c`.`decRev` AS `decRev`,`c`.`janBud` AS `janBud`,`c`.`febBud` AS `febBud`,`c`.`marBud` AS `marBud`,`c`.`aprBud` AS `aprBud`,`c`.`mayBud` AS `mayBud`,`c`.`junBud` AS `junBud`,`c`.`julBud` AS `julBud`,`c`.`augBud` AS `augBud`,`c`.`sepBud` AS `sepBud`,`c`.`octBud` AS `octBud`,`c`.`novBud` AS `novBud`,`c`.`decBud` AS `decBud` from ((`runrate_nodes` `a` join `runrate_services` `b` on((`a`.`sid` = `b`.`id`))) left join `runrate_revenues` `c` on((`a`.`id` = `c`.`nid`))) where (`a`.`reporttype` = 0) order by `a`.`level`) */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

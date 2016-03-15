@@ -127,7 +127,7 @@
 </div>
 
 <?php
-  $this->load->view('new_service');
+  $this->load->view('services');
 
 ?>
 
@@ -231,14 +231,52 @@ var $ARPUTbl = $('table#ARPUTbl');
 
 
 
-function setting(sname,id,sids,did,ctype,indent){
+function setting(sname,id,sids,did,ctype,indent,rtype){
   $(".modal-title").html(sname);
   $("input#sumIds").val(sids);  
+  $("input#id").val(id);  
+  $("input#reporttype").val(rtype);  
   $("input#divisorId").val(did);  
+  var option ="<option value='0'>Default Value</option>";
+  option+="<option value='1'>SUM(,)</option>";
+  option+="<option value='2'>SUM(:)</option>";
+  option+="<option value='3'>SUM(,) / </option>";
+  $('select#ctype').html(option);
+  if(rtype!=3){
+    $("select#ctype option[value='3']").remove();
+    $("input#divisorId").prop('disabled', true);
+  }else{
+    $("input#divisorId").prop('disabled',false);
+     $("select#ctype option[value='0']").remove();
+     $("select#ctype option[value='1']").remove();
+     $("select#ctype option[value='2']").remove();
+  }
   $('select#ctype option[value='+ctype+']').attr('selected','selected');
   $("input#depth").val(indent);  
 
 }
+
+ // alert("helo");
+
+$("button#btn-save").on("click",function(){ 
+   $form = $("#form_setting");
+   data =$form.serialize();
+   action = $form.attr('action');
+
+
+  $.post(action,data).done(function(res){
+    res = JSON.parse(res);
+    $("span#response").html(res.message);
+    if(res.code==1){
+      setTimeout(function () {
+      window.location.href="";
+    }, 1000);
+    }
+
+  });
+ }); 
+
+
 
 //$table.floatThead();
 
